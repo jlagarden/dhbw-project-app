@@ -35,7 +35,7 @@ class MyConsumer(val broker : String, val topic : String) {
     while(iterator.hasNext()) {
         //implicit val timeout = Timeout(10 seconds)
         //val future = p.ask("test").map(whatever => println(whatever))
-        println(iterator.next().message())
+        println(EventData(iterator.next().message()).event())
     }
 
     def createStream(connector: ConsumerConnector, topic: String) = {
