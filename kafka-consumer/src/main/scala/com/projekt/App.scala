@@ -33,8 +33,8 @@ class MyConsumer(val broker : String, val topic : String) {
 
     // process messages
     while(iterator.hasNext()) {
-        implicit val timeout = Timeout(10 seconds)
-        val future = p.ask("test").map(whatever => println(whatever))
+        //implicit val timeout = Timeout(10 seconds)
+        //val future = p.ask("test").map(whatever => println(whatever))
         println(iterator.next().message())
     }
 
@@ -61,7 +61,7 @@ class MyConsumer(val broker : String, val topic : String) {
     }
 
     def run(): Unit = {
-   }
+    } 
 
 }
 
