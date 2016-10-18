@@ -6,6 +6,7 @@ import akka.actor.Props
 import org.json4s._
 import org.json4s.Formats._
 import org.json4s.native.JsonMethods._
+import scala.collection.immutable.Queue
 
 
 // states
@@ -22,9 +23,9 @@ case object Schieber1           extends State
 case object Schieber2           extends State
 case object Ende                extends State
 
-// events 
+// events
 sealed trait ProdEvent
-case object L1start             extends ProdEvent            
+case object L1start             extends ProdEvent
 case object L1ende              extends ProdEvent
 case object L2start             extends ProdEvent
 case object L2ende              extends ProdEvent
@@ -39,7 +40,7 @@ case object Bohre               extends ProdEvent
 case object Undefined           extends ProdEvent
 
 case class EventData(val value: Any, val status: String, val itemName : String, val timestamp: Int) {
-    
+
     /*
     Events:
     L1start     {"value":false,"status":"GOOD","itemName":"L1","timestamp":1476726173743}
@@ -95,70 +96,75 @@ case class EventData(val value: Any, val status: String, val itemName : String, 
             case EventData(_, _, "DRILLING_HEAT", _) => Bohre
 
             case EventData(_,_,_,_) => Undefined
-        } 
+        }
     }
 
 }
 
 object EventData {
-    
+
     implicit val formats = DefaultFormats
 
     def apply(input: String) = parse(input).extract[EventData]
 
 }
 
-class ProduktionsFSM extends FSM[State, Any] {
+class ProduktionsFSM extends FSM[State, Queue[EventData]] {
     // Zustandsautomat: Start -> L1 -> Transport1 -> L2 -> Schieber1 -> Fraesen -> Transport2 -> Bohren -> Schieben2 -> L5 -> Ende
-    
-    startWith(Start, null)
+
+    startWith(Start, Queue[EventData]())
 
     when(Start) {
-        case Event(L1start, _) => goto(L1)
+        case Event((L1start, x: EventData), state) => goto(L1) using state.enqueue(x)
     }
-    
+
     when(L1) {
-        case Event(L1ende, _) => goto(Transport1)
+        case Event((L1ende, x: EventData), state) => goto(Transport1) using state.enqueue(x)
     }
 
     when(Transport1) {
-        case Event(L2start,_) => goto(L2)
+        case Event((L2start,x: EventData), state) => goto(L2) using state.enqueue(x)
     }
-      
+
     when(L2) {
-        case Event(L2ende, _) => goto(Schieber1)
+        case Event((L2ende, x: EventData), state) => goto(Schieber1) using state.enqueue(x)
     }
-  
+
     when(Schieber1) {
-        case Event(L3start, _) => goto(Fraesen)
+        case Event((L3start, x: EventData), state) => goto(Fraesen) using state.enqueue(x)
     }
 
     when(Fraesen) {
-        case Event(L3ende, _) => goto(Transport2)
+        case Event((L3ende, x: EventData), state) => goto(Transport2) using state.enqueue(x)
+        case Event((Fraese, x: EventData), state) => stay() using state.enqueue(x)
     }
-    
+
     when(Transport2) {
-        case Event(L4start, _) => goto(Bohren)
+        case Event((L4start, x: EventData), state) => goto(Bohren) using state.enqueue(x)
     }
 
     when(Bohren) {
-        case Event(L4ende, _) => goto(Schieber2)
+        case Event((L4ende, x: EventData), state) => goto(Schieber2) using state.enqueue(x)
+        case Event((Bohre, x: EventData), state) => stay() using state.enqueue(x)
     }
-    
+
     when(Schieber2) {
-        case Event(L5start, _) => goto(L5)
+        case Event((L5start, x: EventData), state) => goto(L5) using state.enqueue(x)
     }
 
     when(L5) {
-        case Event(L5ende, _) => goto(Ende)
+        case Event((L5ende, x: EventData), state) => goto(Ende) using state.enqueue(x)
     }
 
     when(Ende) {
         case Event(_,_) => stay()
     }
-    
+
     whenUnhandled {
-        case Event(e, _) =>  stay()
+        case Event(e, d) => {
+            println(s"Unhandled Event $e with Data $d")
+            stay()
+        }
     }
 
     initialize()

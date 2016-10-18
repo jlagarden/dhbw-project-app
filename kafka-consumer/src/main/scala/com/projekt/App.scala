@@ -10,7 +10,7 @@ import kafka.serializer.StringDecoder
 import scala.collection.JavaConversions._
 
 import akka.actor._
-import akka.util.Timeout 
+import akka.util.Timeout
 import scala.concurrent.duration._
 import akka.pattern.ask
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -19,24 +19,14 @@ import org.apache.log4j.Logger
 
 import scala.collection.immutable.HashMap
 
-class MyConsumer(val broker : String, val topic : String) {
+class MyConsumer(val broker: String, val topic: String, val p: ActorRef) extends Runnable{
 
     val logger : Logger = Logger.getLogger(this.getClass.getName);
-    
+
     val conf = createMyConf(broker)
     val connector = Consumer.create(conf)
-    val stream = createStream(connector,topic)   
+    val stream = createStream(connector,topic)
     val iterator = stream.iterator()
-    
-    val system = ActorSystem()
-    val p = system.actorOf(Props[Production])
-
-    // process messages
-    while(iterator.hasNext()) {
-        //implicit val timeout = Timeout(10 seconds)
-        //val future = p.ask("test").map(whatever => println(whatever))
-        println(EventData(iterator.next().message()).event())
-    }
 
     def createStream(connector: ConsumerConnector, topic: String) = {
         val topicCountMap = Map(topic -> 1)
@@ -44,7 +34,7 @@ class MyConsumer(val broker : String, val topic : String) {
         println(stream)
         stream
     }
-    
+
     def createMyConf(broker : String) = {
         val props = new Properties()
         props.put("zookeeper.connect", broker);
@@ -61,18 +51,28 @@ class MyConsumer(val broker : String, val topic : String) {
     }
 
     def run(): Unit = {
-    } 
+      // process messages
+      while(iterator.hasNext()) {
+          //implicit val timeout = Timeout(10 seconds)
+          val data = EventData(iterator.next().message())
+          val event = data.event()
+          p ! (event, data)
+          println(s"$event : $data")
+      }
+    }
 
 }
 
 
 
 object App {
-  
+
     def main(args : Array[String]) {
-        val c = new MyConsumer("127.0.0.1:2181","prod")
+        val system = ActorSystem()
+        val p = system.actorOf(Props[Production])
+        (new Thread(new MyConsumer("127.0.0.1:2181", "prod", p))).start()
 
     }
 
-  
+
 }
