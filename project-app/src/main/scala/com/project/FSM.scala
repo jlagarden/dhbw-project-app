@@ -1,4 +1,4 @@
-package com.projekt
+package com.project
 
 import akka.actor.FSM
 import akka.actor.FSM._

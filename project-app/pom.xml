@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.projekt</groupId>
-  <artifactId>kafka-consumer</artifactId>
+  <groupId>com.project</groupId>
+  <artifactId>project-app</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>${project.artifactId}</name>
-  <description>Kafka Consumer written in scala</description>
-  <inceptionYear>2015</inceptionYear>
+  <description>Industry 4.0 Realtime Production Monitoring Scenario</description>
+  <inceptionYear>2016</inceptionYear>
   <licenses>
     <license>
       <name>My License</name>
@@ -21,8 +21,23 @@
     <scala.version>2.11.5</scala.version>
     <scala.compat.version>2.11</scala.compat.version>
   </properties>
-
+  <repositories>
+      <repository>
+          <id>jitpack.io</id>
+          <url>https://jitpack.io</url>
+      </repository>
+  </repositories>
   <dependencies>
+      <dependency>
+          <groupId>org.apache.activemq</groupId>
+          <artifactId>activemq-all</artifactId>
+          <version>5.14.1</version>
+      </dependency>
+    <dependency>
+        <groupId>com.github.fancellu</groupId>
+          <artifactId>jmsScala</artifactId>
+        <version>v0.81</version>
+    </dependency>
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
@@ -34,7 +49,7 @@
       <artifactId>kafka_2.11</artifactId>
       <version>0.8.2.1</version>
     </dependency>
-    
+
     <!-- https://mvnrepository.com/artifact/com.typesafe.akka/akka-actor_2.11 -->
     <dependency>
       <groupId>com.typesafe.akka</groupId>
@@ -54,7 +69,7 @@
       <artifactId>log4j</artifactId>
       <version>1.2.17</version>
     </dependency>
-    
+
 
     <!-- Test -->
     <dependency>
@@ -81,7 +96,7 @@
     <sourceDirectory>src/main/scala</sourceDirectory>
     <testSourceDirectory>src/test/scala</testSourceDirectory>
     <plugins>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
@@ -92,7 +107,7 @@
             </descriptorRefs>
             <archive>
                 <manifest>
-                    <mainClass>com.projekt.App</mainClass>
+                    <mainClass>com.project.App</mainClass>
                 </manifest>
             </archive>
         </configuration>

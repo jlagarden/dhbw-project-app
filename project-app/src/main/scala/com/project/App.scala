@@ -1,4 +1,4 @@
-package com.projekt
+package com.project
 
 import kafka.consumer._
 import kafka.message._
@@ -71,7 +71,7 @@ object App {
         val system = ActorSystem()
         val p = system.actorOf(Props[Production])
         (new Thread(new MyConsumer("127.0.0.1:2181", "prod", p))).start()
-
+        val amqconsumer = new AMQConsumer()
     }
 
 

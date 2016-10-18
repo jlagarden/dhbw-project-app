@@ -1,6 +1,6 @@
-package com.projekt
+package com.project
 
-import com.projekt._
+import com.project._
 import akka.actor._
 import scala.collection.mutable.HashMap
 import scala.util.{Try, Success, Failure}
