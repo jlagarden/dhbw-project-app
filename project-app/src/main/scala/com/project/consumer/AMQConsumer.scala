@@ -1,5 +1,8 @@
 package com.project.consumer
 
+import com.project.production._
+
+import scala.xml._
 import com.felstar.jmsScala.JMS._
 import com.felstar.jmsScala.JMS.AllImplicits._
 import org.apache.activemq.ActiveMQConnectionFactory
@@ -18,8 +21,15 @@ class AMQConsumer(val broker: String, val topic: String) {
   println("AMQConsumer: Consumer online")
 
   messageConsumer.setMessageListener(new MessageListener(){
-     def onMessage(mess:javax.jms.Message)=  {
-       println("RECEIVED:  " + mess.asText)
+     def onMessage(mess:Message)=  {
+       processMessage(mess)
      }
   })
+
+  def processMessage(mess:Message) {
+    val inp = mess.asText
+    val xml = scala.xml.XML.loadString(inp)
+    val erpData = ERPData.fromXml(xml)
+    println("ERPData: " + erpData)
+  }
 }
