@@ -1,18 +1,18 @@
 package com.project.production
 
-class ERPData(val customerNumber: String, val materialNumber: String, val orderNumber: String, val timeStamp: String) {
-  override def toString =
-    s"customerNumber: $customerNumber, materialNumber: $materialNumber, orderNumber: $orderNumber, timeStamp: $timeStamp"
-}
+import scala.xml._
+
+case class ERPData private (val customerNumber: String, val materialNumber: String, val orderNumber: String, val timeStamp: String)
 
 object ERPData {
   //convert XML to ERPData
-  def fromXml(node: scala.xml.Node):ERPData = {
+  def apply(input: String): ERPData = {
+    val node = scala.xml.XML.loadString(input)
     val customerNumber = (node \ "customerNumber").text
     val materialNumber = (node \ "materialNumber").text
     val orderNumber = (node \ "orderNumber").text
     val timeStamp = (node \ "timeStamp").text
 
-    new ERPData(customerNumber, materialNumber, orderNumber, timeStamp)
+    ERPData(customerNumber, materialNumber, orderNumber, timeStamp)
   }
 }

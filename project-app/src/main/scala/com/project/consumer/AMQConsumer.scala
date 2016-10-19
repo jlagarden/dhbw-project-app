@@ -28,7 +28,7 @@ class AMQConsumer(val broker: String, val topic: String) extends Actor {
 
   messageConsumer.setMessageListener(new MessageListener(){
      def onMessage(mess:Message)=  {
-       context.parent ! mess.asText
+       context.parent ! ERPData(mess.asText)
      }
   })
 

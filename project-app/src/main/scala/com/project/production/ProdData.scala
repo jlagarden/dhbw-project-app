@@ -8,7 +8,7 @@ import org.json4s.Formats._
 import org.json4s.native.JsonMethods._
 import scala.collection.immutable.Queue
 
-case class ProdData(val value: Any, val status: String, val itemName : String, val timestamp: Int) {
+case class ProdData private (val value: Any, val status: String, val itemName : String, val timestamp: Int) {
 
     /*
     Events:
