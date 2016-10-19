@@ -1,4 +1,4 @@
-package com.project
+package com.project.consumer
 
 import com.felstar.jmsScala.JMS._
 import com.felstar.jmsScala.JMS.AllImplicits._

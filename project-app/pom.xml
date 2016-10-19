@@ -4,7 +4,7 @@
   <artifactId>project-app</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>${project.artifactId}</name>
-  <description>Industry 4.0 Realtime Production Monitoring Scenario</description>
+  <description>Industry 4.0 Realtime ProductionManager Monitoring Scenario</description>
   <inceptionYear>2016</inceptionYear>
   <licenses>
     <license>
@@ -107,7 +107,7 @@
             </descriptorRefs>
             <archive>
                 <manifest>
-                    <mainClass>com.project.App</mainClass>
+                    <mainClass>com.project.app.App</mainClass>
                 </manifest>
             </archive>
         </configuration>

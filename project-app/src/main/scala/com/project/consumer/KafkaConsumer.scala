@@ -1,4 +1,6 @@
-package com.project
+package com.project.consumer
+
+import com.project.production._
 
 import kafka.consumer._
 import kafka.message._
@@ -19,7 +21,7 @@ import org.apache.log4j.Logger
 
 import scala.collection.immutable.HashMap
 
-class MyConsumer(val broker: String, val topic: String, val p: ActorRef) extends Runnable{
+class KafkaConsumer(val broker: String, val topic: String, val p: ActorRef) extends Runnable{
 
     val logger : Logger = Logger.getLogger(this.getClass.getName);
 
@@ -54,25 +56,11 @@ class MyConsumer(val broker: String, val topic: String, val p: ActorRef) extends
       // process messages
       while(iterator.hasNext()) {
           //implicit val timeout = Timeout(10 seconds)
-          val data = EventData(iterator.next().message())
+          val data = ProdData(iterator.next().message())
           val event = data.event()
           p ! (event, data)
           println(s"$event : $data")
       }
     }
-
-}
-
-
-
-object App {
-
-    def main(args : Array[String]) {
-        val system = ActorSystem()
-        val p = system.actorOf(Props[Production])
-        (new Thread(new MyConsumer("127.0.0.1:2181", "prod", p))).start()
-        val amqconsumer = new AMQConsumer("tcp://localhost:61616","m_orders")
-    }
-
 
 }
