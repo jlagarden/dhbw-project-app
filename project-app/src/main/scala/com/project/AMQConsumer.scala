@@ -5,22 +5,20 @@ import com.felstar.jmsScala.JMS.AllImplicits._
 import org.apache.activemq.ActiveMQConnectionFactory
 import javax.jms._
 
-class AMQConsumer {
-  val connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:32786")
+class AMQConsumer(val broker: String, val topic: String) {
+  val connectionFactory = new ActiveMQConnectionFactory(broker)
   val connection = connectionFactory.createConnection()
   connection.start
-  println("connection started")
+  println("AMQConsumer: Connection established")
   val session = connection.session(false, Session.AUTO_ACKNOWLEDGE)
-  println("session created")
-  val destination = session.topic("m_orders")
-  println("topic created")
+  println("AMQConsumer: Session created")
+  val destination = session.topic(topic)
+  println("AMQConsumer: Topic subscribed")
   val messageConsumer = destination.consumer
-  println("consumer created")
+  println("AMQConsumer: Consumer online")
 
   messageConsumer.setMessageListener(new MessageListener(){
      def onMessage(mess:javax.jms.Message)=  {
-       println("message received")
-       println("RECEIVED:  " + mess)
        println("RECEIVED:  " + mess.asText)
      }
   })
