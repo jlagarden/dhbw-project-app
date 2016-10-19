@@ -38,9 +38,8 @@ class KafkaConsumer(val broker: String, val topic: String) extends Actor{
     while(iterator.hasNext()) {
         //implicit val timeout = Timeout(10 seconds)
         val data = ProdData(iterator.next().message())
-        val event = data.event()
-        context.parent ! (event, data)
-        println(s"$event : $data")
+        context.parent ! data
+        println(s"$data")
     }
 
     def createStream(connector: ConsumerConnector, topic: String) = {
