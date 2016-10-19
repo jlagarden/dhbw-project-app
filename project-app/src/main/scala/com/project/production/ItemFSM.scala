@@ -14,7 +14,10 @@ class ItemFSM extends FSM[State, Queue[ProdData]] {
     startWith(Start, Queue[ProdData]())
 
     when(Start) {
-        case Event((L1start, x: ProdData), state) => goto(L1) using state.enqueue(x)
+        case Event((L1start, x: ProdData), state) => {
+            println("Start")
+            goto(L1) using state.enqueue(x)
+        }
     }
 
     when(L1) {
@@ -52,7 +55,10 @@ class ItemFSM extends FSM[State, Queue[ProdData]] {
     }
 
     when(L5) {
-        case Event((L5ende, x: ProdData), state) => goto(Ende) using state.enqueue(x)
+        case Event((L5ende, x: ProdData), state) => {
+            println("Ende")
+            goto(Ende) using state.enqueue(x)
+        }
     }
 
     when(Ende) {

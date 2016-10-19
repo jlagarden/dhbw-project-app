@@ -33,14 +33,8 @@ class KafkaConsumer(val broker: String, val topic: String) extends Actor{
     val conf = createMyConf(broker)
     val connector = Consumer.create(conf)
     val stream = createStream(connector,topic)
-    val iterator = stream.iterator()
 
-    while(iterator.hasNext()) {
-        //implicit val timeout = Timeout(10 seconds)
-        val data = ProdData(iterator.next().message())
-        context.parent ! data
-        println(s"$data")
-    }
+    stream.flatMap(y => Some(context.parent ! ProdData(y.message())))
 
     def createStream(connector: ConsumerConnector, topic: String) = {
         val topicCountMap = Map(topic -> 1)
