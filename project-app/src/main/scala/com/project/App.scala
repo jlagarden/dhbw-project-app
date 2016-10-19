@@ -71,7 +71,7 @@ object App {
         val system = ActorSystem()
         val p = system.actorOf(Props[Production])
         (new Thread(new MyConsumer("127.0.0.1:2181", "prod", p))).start()
-        val amqconsumer = new AMQConsumer()
+        val amqconsumer = new AMQConsumer("tcp://localhost:61616","m_orders")
     }
 
 
