@@ -1,6 +1,6 @@
 package com.project.production
 
-import com.project._
+import com.project.consumer._
 import akka.actor._
 import scala.collection.mutable.HashMap
 import scala.util.{Try, Success, Failure}
@@ -8,6 +8,11 @@ import scala.util.{Try, Success, Failure}
 class ProductionManager extends Actor {
     val products : HashMap[Int, ActorRef] = new HashMap[Int, ActorRef]
     var counter : Int = 0;
+
+    override def preStart(): Unit = {
+        context.actorOf(KafkaConsumer.props("127.0.0.1:2181", "prod"))
+        context.actorOf(AMQConsumer.props("tcp://127.0.0.1:61616", "m_orders"))
+    }
 
     def receive = {
         case (L1start, x : ProdData) => {
@@ -24,5 +29,6 @@ class ProductionManager extends Actor {
             fsm2.map(_ ! (x,y))
 
         }
+        case x => println(s"unhandled $x")
     }
 }

@@ -27,8 +27,8 @@ object App {
     def main(args : Array[String]) {
         val system = ActorSystem()
         val p = system.actorOf(Props[ProductionManager])
-        (new Thread(new KafkaConsumer("127.0.0.1:2181", "prod", p))).start()
-        val amqconsumer = new AMQConsumer("tcp://127.0.0.1:61616","m_orders")
+        //(new Thread(new KafkaConsumer("127.0.0.1:2181", "prod", p))).start()
+        //val amqconsumer = new AMQConsumer("tcp://127.0.0.1:61616","m_orders")
     }
 
 

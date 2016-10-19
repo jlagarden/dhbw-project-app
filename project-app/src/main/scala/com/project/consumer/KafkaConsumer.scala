@@ -21,7 +21,12 @@ import org.apache.log4j.Logger
 
 import scala.collection.immutable.HashMap
 
-class KafkaConsumer(val broker: String, val topic: String, val p: ActorRef) extends Runnable{
+object KafkaConsumer {
+
+    def props(broker: String, topic: String): Props = Props(new KafkaConsumer(broker, topic))
+}
+
+class KafkaConsumer(val broker: String, val topic: String) extends Actor{
 
     val logger : Logger = Logger.getLogger(this.getClass.getName);
 
@@ -29,6 +34,14 @@ class KafkaConsumer(val broker: String, val topic: String, val p: ActorRef) exte
     val connector = Consumer.create(conf)
     val stream = createStream(connector,topic)
     val iterator = stream.iterator()
+
+    while(iterator.hasNext()) {
+        //implicit val timeout = Timeout(10 seconds)
+        val data = ProdData(iterator.next().message())
+        val event = data.event()
+        context.parent ! (event, data)
+        println(s"$event : $data")
+    }
 
     def createStream(connector: ConsumerConnector, topic: String) = {
         val topicCountMap = Map(topic -> 1)
@@ -52,15 +65,9 @@ class KafkaConsumer(val broker: String, val topic: String, val p: ActorRef) exte
         config
     }
 
-    def run(): Unit = {
-      // process messages
-      while(iterator.hasNext()) {
-          //implicit val timeout = Timeout(10 seconds)
-          val data = ProdData(iterator.next().message())
-          val event = data.event()
-          p ! (event, data)
-          println(s"$event : $data")
-      }
+
+    def receive = {
+        case _ => ()
     }
 
 }
