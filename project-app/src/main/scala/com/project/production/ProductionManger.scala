@@ -15,19 +15,22 @@ class ProductionManager extends Actor {
     }
 
     def receive = {
-        case (L1start, x : ProdData) => {
-            val item = context.actorOf(Props[Item])
-            item ! (L1start, x)
-            products += (counter -> item)
-            counter += 1
-        }
-        case (x : ProdEvent, y: ProdData) => {
-            val fsm1: Option[ActorRef] = products.get(counter - 1)
-            val fsm2: Option[ActorRef] = products.get(counter - 2)
+        case x: ProdData => {
+            (x.event(), x) match {
+                case (L1start, y : ProdData) => {
+                    val item = context.actorOf(Props[Item])
+                    item ! (L1start, x)
+                    products += (counter -> item)
+                    counter += 1
+                }
+                case (x : ProdEvent, y: ProdData) => {
+                    val item1: Option[ActorRef] = products.get(counter - 1)
+                    val item2: Option[ActorRef] = products.get(counter - 2)
 
-            fsm1.map(_ ! (x,y))
-            fsm2.map(_ ! (x,y))
-
+                    item1.map(_ ! (x, y))
+                    item2.map(_ ! (x, y))
+                }
+            }
         }
         case x : ERPData => {
             val item: Option[ActorRef] = products.get(counter -1)
