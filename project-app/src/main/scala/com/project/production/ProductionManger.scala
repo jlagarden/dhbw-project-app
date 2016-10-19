@@ -29,6 +29,11 @@ class ProductionManager extends Actor {
             fsm2.map(_ ! (x,y))
 
         }
+        case x : ERPData => {
+            val item: Option[ActorRef] = products.get(counter -1)
+            item.map(_ ! x)
+        }
+
         case x => println(s"unhandled $x")
     }
 }
