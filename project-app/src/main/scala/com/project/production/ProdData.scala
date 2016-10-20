@@ -12,57 +12,57 @@ case class ProdData private (val value: Any, val status: String, val itemName : 
 
     /*
     Events:
-    L1start     {"value":false,"status":"GOOD","itemName":"L1","timestamp":1476726173743}
-    L1ende      {"value":true,"status":"GOOD","itemName":"L1","timestamp":1476726203843}
-    L2start     {"value":false,"status":"GOOD","itemName":"L2","timestamp":1476726273923}
-    L2ende      {"value":true,"status":"GOOD","itemName":"L2","timestamp":1476726304023}
-    L3start     {"value":false,"status":"GOOD","itemName":"L3","timestamp":1476726374083}
-    Fraese      {"value":true,"status":"GOOD","itemName":"MILLING","timestamp":1476726404193}
-    Fraese      {"value":12480,"status":"GOOD","itemName":"MILLING_SPEED","timestamp":1476726414223}
-    Fraese      {"value":143.96,"status":"GOOD","itemName":"MILLING_HEAT","timestamp":1476726464303}
-    Fraese      {"value":165.554,"status":"GOOD","itemName":"MILLING_HEAT","timestamp":1476726514373}
-    Fraese      {"value":15000,"status":"GOOD","itemName":"MILLING_SPEED","timestamp":1476726584473}
-    Fraese      {"value":215.94,"status":"GOOD","itemName":"MILLING_HEAT","timestamp":1476726594523}
-    Fraese      {"value":201.544,"status":"GOOD","itemName":"MILLING_HEAT","timestamp":1476726664613}
-    Fraese      {"value":0,"status":"GOOD","itemName":"MILLING_SPEED","timestamp":1476726724713}
-    Fraese      {"value":146.66,"status":"GOOD","itemName":"MILLING_HEAT","timestamp":1476726734753}
-    Fraese      {"value":39.769999999999996,"status":"GOOD","itemName":"MILLING_HEAT","timestamp":1476726764843}
-    Fraese      {"value":false,"status":"GOOD","itemName":"MILLING","timestamp":1476726774873}
-    L3ende      {"value":true,"status":"GOOD","itemName":"L3","timestamp":1476726814943}
-    L4start     {"value":false,"status":"GOOD","itemName":"L4","timestamp":1476726865023}
-    Bohre       {"value":true,"status":"GOOD","itemName":"DRILLING","timestamp":1476726905133}
-    Bohre       {"value":15500,"status":"GOOD","itemName":"DRILLING_SPEED","timestamp":1476726915153}
-    Bohre       {"value":212.7,"status":"GOOD","itemName":"DRILLING_HEAT","timestamp":1476726965253}
-    Bohre       {"value":244.60499999999996,"status":"GOOD","itemName":"DRILLING_HEAT","timestamp":1476727015323}
-    Bohre       {"value":18500,"status":"GOOD","itemName":"DRILLING_SPEED","timestamp":1476727085393}
-    Bohre       {"value":319.04999999999995,"status":"GOOD","itemName":"DRILLING_HEAT","timestamp":1476727095433}
-    Bohre       {"value":297.78,"status":"GOOD","itemName":"DRILLING_HEAT","timestamp":1476727165503}
-    Bohre       {"value":0,"status":"GOOD","itemName":"DRILLING_SPEED","timestamp":1476727215563}
-    Bohre       {"value":120.98,"status":"GOOD","itemName":"DRILLING_HEAT","timestamp":1476727225603}
-    Bohre       {"value":false,"status":"GOOD","itemName":"DRILLING","timestamp":1476727235633}
-    L4ende      {"value":true,"status":"GOOD","itemName":"L4","timestamp":1476727265673}
-    L5ende      {"value":false,"status":"GOOD","itemName":"L5","timestamp":1476727365793}
-    L5ende      {"value":true,"status":"GOOD","itemName":"L5","timestamp":1476727395873}
+    L1NonReceiving     {"value":false,"status":"GOOD","itemName":"L1","timestamp":1476726173743}
+    L1Receiving      {"value":true,"status":"GOOD","itemName":"L1","timestamp":1476726203843}
+    L2NonReceiving     {"value":false,"status":"GOOD","itemName":"L2","timestamp":1476726273923}
+    L2Receiving      {"value":true,"status":"GOOD","itemName":"L2","timestamp":1476726304023}
+    L3NonReceiving     {"value":false,"status":"GOOD","itemName":"L3","timestamp":1476726374083}
+    InMillingStation      {"value":true,"status":"GOOD","itemName":"MILLING","timestamp":1476726404193}
+    InMillingStation      {"value":12480,"status":"GOOD","itemName":"MILLING_SPEED","timestamp":1476726414223}
+    InMillingStation      {"value":143.96,"status":"GOOD","itemName":"MILLING_HEAT","timestamp":1476726464303}
+    InMillingStation      {"value":165.554,"status":"GOOD","itemName":"MILLING_HEAT","timestamp":1476726514373}
+    InMillingStation      {"value":15000,"status":"GOOD","itemName":"MILLING_SPEED","timestamp":1476726584473}
+    InMillingStation      {"value":215.94,"status":"GOOD","itemName":"MILLING_HEAT","timestamp":1476726594523}
+    InMillingStation      {"value":201.544,"status":"GOOD","itemName":"MILLING_HEAT","timestamp":1476726664613}
+    InMillingStation      {"value":0,"status":"GOOD","itemName":"MILLING_SPEED","timestamp":1476726724713}
+    InMillingStation      {"value":146.66,"status":"GOOD","itemName":"MILLING_HEAT","timestamp":1476726734753}
+    InMillingStation      {"value":39.769999999999996,"status":"GOOD","itemName":"MILLING_HEAT","timestamp":1476726764843}
+    InMillingStation      {"value":false,"status":"GOOD","itemName":"MILLING","timestamp":1476726774873}
+    L3Receiving      {"value":true,"status":"GOOD","itemName":"L3","timestamp":1476726814943}
+    L4NonReceiving     {"value":false,"status":"GOOD","itemName":"L4","timestamp":1476726865023}
+    InDrillingStation       {"value":true,"status":"GOOD","itemName":"DRILLING","timestamp":1476726905133}
+    InDrillingStation       {"value":15500,"status":"GOOD","itemName":"DRILLING_SPEED","timestamp":1476726915153}
+    InDrillingStation       {"value":212.7,"status":"GOOD","itemName":"DRILLING_HEAT","timestamp":1476726965253}
+    InDrillingStation       {"value":244.60499999999996,"status":"GOOD","itemName":"DRILLING_HEAT","timestamp":1476727015323}
+    InDrillingStation       {"value":18500,"status":"GOOD","itemName":"DRILLING_SPEED","timestamp":1476727085393}
+    InDrillingStation       {"value":319.04999999999995,"status":"GOOD","itemName":"DRILLING_HEAT","timestamp":1476727095433}
+    InDrillingStation       {"value":297.78,"status":"GOOD","itemName":"DRILLING_HEAT","timestamp":1476727165503}
+    InDrillingStation       {"value":0,"status":"GOOD","itemName":"DRILLING_SPEED","timestamp":1476727215563}
+    InDrillingStation       {"value":120.98,"status":"GOOD","itemName":"DRILLING_HEAT","timestamp":1476727225603}
+    InDrillingStation       {"value":false,"status":"GOOD","itemName":"DRILLING","timestamp":1476727235633}
+    L4Receiving      {"value":true,"status":"GOOD","itemName":"L4","timestamp":1476727265673}
+    L5Receiving      {"value":false,"status":"GOOD","itemName":"L5","timestamp":1476727365793}
+    L5Receiving      {"value":true,"status":"GOOD","itemName":"L5","timestamp":1476727395873}
     */
 
     def event(): ProdEvent = {
         this match {
-            case ProdData(false, _, "L1", _) => L1start
-            case ProdData(true, _, "L1", _) => L1ende
-            case ProdData(false, _, "L2", _) => L2start
-            case ProdData(true, _, "L2", _) => L2ende
-            case ProdData(false, _, "L3", _) => L3start
-            case ProdData(true, _, "L3", _) => L3ende
-            case ProdData(false, _, "L4", _) => L4start
-            case ProdData(true, _, "L4", _) => L4ende
-            case ProdData(false, _,"L5",  _) => L5start
-            case ProdData(true, _, "L5", _) => L5ende
-            case ProdData(_, _, "MILLING", _) => Fraese
-            case ProdData(_, _, "MILLING_SPEED", _) => Fraese
-            case ProdData(_, _, "MILLING_HEAT", _) => Fraese
-            case ProdData(_, _, "DRILLING", _) => Bohre
-            case ProdData(_, _, "DRILLING_SPEED", _) => Bohre
-            case ProdData(_, _, "DRILLING_HEAT", _) => Bohre
+            case ProdData(false, _, "L1", _) => L1NonReceiving
+            case ProdData(true, _, "L1", _) => L1Receiving
+            case ProdData(false, _, "L2", _) => L2NonReceiving
+            case ProdData(true, _, "L2", _) => L2Receiving
+            case ProdData(false, _, "L3", _) => L3NonReceiving
+            case ProdData(true, _, "L3", _) => L3Receiving
+            case ProdData(false, _, "L4", _) => L4NonReceiving
+            case ProdData(true, _, "L4", _) => L4Receiving
+            case ProdData(false, _,"L5",  _) => L5NonReceiving
+            case ProdData(true, _, "L5", _) => L5Receiving
+            case ProdData(_, _, "MILLING", _) => InMillingStation
+            case ProdData(_, _, "MILLING_SPEED", _) => InMillingStation
+            case ProdData(_, _, "MILLING_HEAT", _) => InMillingStation
+            case ProdData(_, _, "DRILLING", _) => InDrillingStation
+            case ProdData(_, _, "DRILLING_SPEED", _) => InDrillingStation
+            case ProdData(_, _, "DRILLING_HEAT", _) => InDrillingStation
 
             case ProdData(_,_,_,_) => Undefined
         }

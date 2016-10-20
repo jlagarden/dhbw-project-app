@@ -12,13 +12,13 @@ import scala.collection.immutable.Queue
 // states
 sealed trait State
 case object Start               extends State
-case object L1                  extends State
-case object L2                  extends State
-case object L5                  extends State
-case object Transport1          extends State
-case object Transport2          extends State
-case object Bohren              extends State
-case object Fraesen             extends State
-case object Schieber1           extends State
-case object Schieber2           extends State
+case object L1Interrupted       extends State
+case object L2Interrupted       extends State
+case object L5Interrupted       extends State
+case object Transporting1       extends State
+case object Transporting2       extends State
+case object InDrillingStationn  extends State
+case object InMillingStationn   extends State
+case object SlideFeeding1       extends State
+case object SlideFeeding2       extends State
 case object Ende                extends State
