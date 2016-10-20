@@ -1,6 +1,7 @@
 package com.project.production
 
 import com.project.consumer._
+import com.project.producer._
 import akka.actor._
 import scala.collection.mutable.HashMap
 import scala.util.{Try, Success, Failure}
@@ -13,6 +14,7 @@ class ProductionManager extends Actor {
         context.actorOf(KafkaConsumer.props("127.0.0.1:2181", "prod"))
         context.actorOf(AMQConsumer.props("tcp://127.0.0.1:61616", "m_orders"))
         context.actorOf(FileConsumer.props())
+        context.actorOf(KafkaProducer.props("localhost:9092", "test"))
     }
 
     def receive = {
