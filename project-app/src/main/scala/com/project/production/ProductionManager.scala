@@ -8,13 +8,18 @@ import scala.util.{Try, Success, Failure}
 
 class ProductionManager extends Actor {
     val products : HashMap[Int, ActorRef] = new HashMap[Int, ActorRef]
+    var kproducer: Option[ActorRef] = None
     var counter : Int = 0;
 
     override def preStart(): Unit = {
         context.actorOf(KafkaConsumer.props("127.0.0.1:2181", "prod"))
         context.actorOf(AMQConsumer.props("tcp://127.0.0.1:61616", "m_orders"))
+<<<<<<< 4ccf4b46971d75484170ad95f628e9330731ba68:project-app/src/main/scala/com/project/production/ProductionManager.scala
         context.actorOf(FileConsumer.props())
         context.actorOf(KafkaProducer.props("localhost:9092", "test"))
+=======
+        kproducer = Some(context.actorOf(KafkaProducer.props("localhost:9092", "test")))
+>>>>>>> ProductionManager kann nun nachrichten an kafka senden:project-app/src/main/scala/com/project/production/ProductionManger.scala
     }
 
     def receive = {
@@ -45,6 +50,9 @@ class ProductionManager extends Actor {
           val item: Option[ActorRef] = products.get(counter -2)
           item.map(_ ! x)
           println(x)
+        }
+        case x: String => {
+            kproducer.map(_ ! x)
         }
 
         case x => println(s"unhandled $x")
