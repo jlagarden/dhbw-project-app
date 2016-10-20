@@ -11,12 +11,12 @@ import java.nio.file.{StandardWatchEventKinds => EventType}
 import java.io.File._
 
 object FileConsumer {
-  def props(): Props = Props(new FileConsumer())
+  def props(path: String): Props = Props(new FileConsumer(path))
 }
 
-class FileConsumer() extends Actor {
+class FileConsumer(val path: String) extends Actor {
   val system = ActorSystem()
-  val watcher: ActorRef = system.actorOf(Props(new FileWatcher(Paths.get("../tmp"))))
+  val watcher: ActorRef = system.actorOf(Props(new FileWatcher(Paths.get(path))))
 
   // util to create a RegisterCallback message for the actor
   def when(events: Event*)(callback: Callback): FileWatcherMessage = {
