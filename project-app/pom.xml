@@ -50,6 +50,12 @@
       <version>0.8.2.1</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.github.pathikrit</groupId>
+      <artifactId>better-files-akka_2.11</artifactId>
+      <version>2.16.0</version>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/com.typesafe.akka/akka-actor_2.11 -->
     <dependency>
       <groupId>com.typesafe.akka</groupId>

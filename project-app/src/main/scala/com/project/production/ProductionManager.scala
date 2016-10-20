@@ -12,6 +12,7 @@ class ProductionManager extends Actor {
     override def preStart(): Unit = {
         context.actorOf(KafkaConsumer.props("127.0.0.1:2181", "prod"))
         context.actorOf(AMQConsumer.props("tcp://127.0.0.1:61616", "m_orders"))
+        context.actorOf(FileConsumer.props())
     }
 
     def receive = {
@@ -31,10 +32,17 @@ class ProductionManager extends Actor {
                     item2.map(_ ! (x, y))
                 }
             }
+            println(x)
         }
         case x : ERPData => {
             val item: Option[ActorRef] = products.get(counter -1)
             item.map(_ ! x)
+            println(x)
+        }
+        case x: SpecData => {
+          val item: Option[ActorRef] = products.get(counter -2)
+          item.map(_ ! x)
+          println(x)
         }
 
         case x => println(s"unhandled $x")
