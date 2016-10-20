@@ -50,6 +50,9 @@ class ProductionManager extends Actor {
         case x: String => {
             kproducer.map(_ ! x)
         }
+        case x: String => {
+            kproducer.map(_ ! x)
+        }
 
         case x => println(s"unhandled $x")
     }
