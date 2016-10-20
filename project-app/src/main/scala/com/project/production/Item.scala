@@ -9,9 +9,11 @@ import akka.actor.Props
 class Item extends Actor {
     val fsm: ActorRef = context.actorOf(Props[ItemFSM])
     var erpData: Option[ERPData] = None
+    var specData: Option[SpecData] = None
 
     def receive = {
         case (x: ProdEvent, y: ProdData) => fsm ! (x, y)
-        case x : ERPData => erpData = Some(x) 
+        case x : ERPData => erpData = Some(x)
+        case x : SpecData => specData = Some(x)
     }
 }
