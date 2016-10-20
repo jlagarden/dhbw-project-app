@@ -14,12 +14,8 @@ class ProductionManager extends Actor {
     override def preStart(): Unit = {
         context.actorOf(KafkaConsumer.props("127.0.0.1:2181", "prod"))
         context.actorOf(AMQConsumer.props("tcp://127.0.0.1:61616", "m_orders"))
-<<<<<<< 4ccf4b46971d75484170ad95f628e9330731ba68:project-app/src/main/scala/com/project/production/ProductionManager.scala
         context.actorOf(FileConsumer.props())
-        context.actorOf(KafkaProducer.props("localhost:9092", "test"))
-=======
         kproducer = Some(context.actorOf(KafkaProducer.props("localhost:9092", "test")))
->>>>>>> ProductionManager kann nun nachrichten an kafka senden:project-app/src/main/scala/com/project/production/ProductionManger.scala
     }
 
     def receive = {
