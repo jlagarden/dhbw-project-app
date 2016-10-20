@@ -9,53 +9,53 @@ import org.json4s.native.JsonMethods._
 import scala.collection.immutable.Queue
 
 class ItemFSM extends FSM[State, Queue[ProdData]] {
-    // Zustandsautomat: Start -> L1 -> Transport1 -> L2 -> Schieber1 -> Fraesen -> Transport2 -> Bohren -> Schieben2 -> L5 -> Ende
+    // Zustandsautomat: Start -> L1 -> Transporting1 -> L2 -> SlideFeeding1 -> InMillingStationn -> Transporting2 -> InDrillingStationn -> Schieben2 -> L5 -> Ende
 
     startWith(Start, Queue[ProdData]())
 
     when(Start) {
-        case Event((L1start, x: ProdData), state) => {
+        case Event((L1NonReceiving, x: ProdData), state) => {
             println("Start")
-            goto(L1) using state.enqueue(x)
+            goto(L1Interrupted) using state.enqueue(x)
         }
     }
 
-    when(L1) {
-        case Event((L1ende, x: ProdData), state) => goto(Transport1) using state.enqueue(x)
+    when(L1Interrupted) {
+        case Event((L1Receiving, x: ProdData), state) => goto(Transporting1) using state.enqueue(x)
     }
 
-    when(Transport1) {
-        case Event((L2start,x: ProdData), state) => goto(L2) using state.enqueue(x)
+    when(Transporting1) {
+        case Event((L2NonReceiving,x: ProdData), state) => goto(L2Interrupted) using state.enqueue(x)
     }
 
-    when(L2) {
-        case Event((L2ende, x: ProdData), state) => goto(Schieber1) using state.enqueue(x)
+    when(L2Interrupted) {
+        case Event((L2Receiving, x: ProdData), state) => goto(SlideFeeding1) using state.enqueue(x)
     }
 
-    when(Schieber1) {
-        case Event((L3start, x: ProdData), state) => goto(Fraesen) using state.enqueue(x)
+    when(SlideFeeding1) {
+        case Event((L3NonReceiving, x: ProdData), state) => goto(InMillingStationn) using state.enqueue(x)
     }
 
-    when(Fraesen) {
-        case Event((L3ende, x: ProdData), state) => goto(Transport2) using state.enqueue(x)
-        case Event((Fraese, x: ProdData), state) => stay() using state.enqueue(x)
+    when(InMillingStationn) {
+        case Event((L3Receiving, x: ProdData), state) => goto(Transporting2) using state.enqueue(x)
+        case Event((InMillingStation, x: ProdData), state) => stay() using state.enqueue(x)
     }
 
-    when(Transport2) {
-        case Event((L4start, x: ProdData), state) => goto(Bohren) using state.enqueue(x)
+    when(Transporting2) {
+        case Event((L4NonReceiving, x: ProdData), state) => goto(InDrillingStationn) using state.enqueue(x)
     }
 
-    when(Bohren) {
-        case Event((L4ende, x: ProdData), state) => goto(Schieber2) using state.enqueue(x)
-        case Event((Bohre, x: ProdData), state) => stay() using state.enqueue(x)
+    when(InDrillingStationn) {
+        case Event((L4Receiving, x: ProdData), state) => goto(SlideFeeding2) using state.enqueue(x)
+        case Event((InDrillingStation, x: ProdData), state) => stay() using state.enqueue(x)
     }
 
-    when(Schieber2) {
-        case Event((L5start, x: ProdData), state) => goto(L5) using state.enqueue(x)
+    when(SlideFeeding2) {
+        case Event((L5NonReceiving, x: ProdData), state) => goto(L5Interrupted) using state.enqueue(x)
     }
 
-    when(L5) {
-        case Event((L5ende, x: ProdData), state) => {
+    when(L5Interrupted) {
+        case Event((L5Receiving, x: ProdData), state) => {
             println("Ende")
             goto(Ende) using state.enqueue(x)
         }

@@ -18,9 +18,9 @@ class ProductionManager extends Actor {
     def receive = {
         case x: ProdData => {
             (x.event(), x) match {
-                case (L1start, y : ProdData) => {
+                case (L1NonReceiving, y : ProdData) => {
                     val item = context.actorOf(Props[Item])
-                    item ! (L1start, x)
+                    item ! (L1NonReceiving, x)
                     products += (counter -> item)
                     counter += 1
                 }
