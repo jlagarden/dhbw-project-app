@@ -57,12 +57,17 @@ class ItemFSM extends FSM[State, Queue[ProdData]] {
     when(L5Interrupted) {
         case Event((L5Receiving, x: ProdData), state) => {
             println("Ende")
-            goto(Ende) using state.enqueue(x)
+            stop(FSM.Normal, state.enqueue(x))
         }
     }
 
     when(Ende) {
         case Event(_,_) => stay()
+    }
+
+
+    onTermination {
+        case StopEvent(_, state, data) => context.parent ! data
     }
 
     whenUnhandled {
