@@ -5,4 +5,6 @@ angular.module('dashboardApp', [
   'ngMaterial',
   'resultCharts',
   'materialList',
+  'customerList',
+  'dashboardOverview',
 ]);

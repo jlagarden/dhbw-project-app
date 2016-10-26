@@ -85,7 +85,7 @@ angular.
                           type : 'donut'
                         }
                     });
-                $scope.chart5 = c3.generate({
+    /*            $scope.chart5 = c3.generate({
                         bindto: '#chart6',
                         data: {
                           columns:[
@@ -106,7 +106,7 @@ angular.
                               ['data1','data2']
                           ]
                         }
-                    });
+                    }); */
 }, 1);
 
 

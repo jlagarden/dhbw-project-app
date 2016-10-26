@@ -3,7 +3,46 @@
  * Base structure
  */
 
+ .header {
+    background-color: #428bca;
+    color: white;
+    opacity: 0.8
+ }
+
+ table, th , td {
+  border: 1px solid grey;
+  border-collapse: collapse;
+  padding: 5px;
+}
+table tr:nth-child(odd) {
+  background-color: #f1f1f1;
+}
+table tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+table {
+    width: 100%;
+}
+
+th {
+    height: 50px;
+    text-align: left;
+}
+
+ .tile { color:black; background-color: white; border: 1px; padding:30px; border-radius: 10px; box-sizing:border-box; -moz-box-sizing:border-box;   }
+
+.blub {vertical-align: bottom;}
+
 .material-icons.md-light { color: #9A9FA1; }
+
+.material-icons.md-light.dashboard { color: grey; font-size: 120px;}
+
+.title{ color: black; font-size: 60px;  font-weight: bold; }
+.title.text{ color: black; font-size: 40px;  font-weight: bold; }
+
+.comment{}
+
 
  .navbar{
    background-color: black;/*#4F94CD;*/

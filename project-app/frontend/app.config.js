@@ -10,8 +10,14 @@
           when('/material', {
             template: '<material-list></material-list>'
           }).
+          when('/customer', {
+            template: '<customer-list></customer-list>'
+          }).
+          when('/dashboard', {
+            template: '<dashboard-overview></dashboard-overview>'
+          }).
           otherwise({
-            redirectTo: "/charts"
+            redirectTo: "/dashboard"
           });
     }]);
 

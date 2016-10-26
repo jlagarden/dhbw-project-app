@@ -37,8 +37,14 @@
     <script src="app.config.js"></script>
     <script src="material-list/material-list.module.js"></script>
     <script src="material-list/material-list.component.js"></script>
+    <script src="customer-list/customer-list.module.js"></script>
+    <script src="customer-list/customer-list.component.js"></script>
     <script src="result-charts/result-charts.module.js"></script>
     <script src="result-charts/result-charts.component.js"></script>
+    <script src="dashboard-overview/dashboard-overview.module.js"></script>
+    <script src="dashboard-overview/dashboard-overview.component.js"></script>
+
+    <script src="directives/widget.js"></script>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   </head>
@@ -52,12 +58,15 @@
             <a class="navbar-brand" href="#">My factory 4.0</a>
           </a>
         </div>
+
+        <!--
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#">Dashboard</a></li>
             <li><a href="#">Help</a></li>
           </ul>
         </div>
+      -->
       </div>
     </nav>
 
@@ -68,22 +77,25 @@
 
             <div class="col-sm-3 col-md-2 sidebar">
               <ul class="nav nav-sidebar">
-                <li><a href="#charts">Overview</a></li>
-                <li><a href="#charts">charts</a></li>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#charts">Charts</a></li>
                 <li><a href="#material">Material</a></li>
+                <li><a href="#customer">Customer</a></li>
               </ul>
 
             </div>
 
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+<!--
               <h2 class="page-header down">Dashboard</h2>
 
-<!--
+
               <div ng-controller="myCtrl">
                 <p>{{ x1 }}</p>
                 <p>{{ x2 }}</p>
               </div>
 -->
+
               <div>
                 <div ng-view></div>
               </div>
