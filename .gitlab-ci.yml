@@ -1,0 +1,28 @@
+# This file is a template, and might need editing before it works on your project.
+image:
+  maven:latest
+variables:
+  MAVEN_OPTS: -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2
+test:
+  stage: test
+  script:
+    - mvn -f # This file is a template, and might need editing before it works on your project.
+image:
+  maven:latest
+cache:
+  paths:
+    - .m2/
+variables:
+  MAVEN_OPTS: -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2
+test:
+  stage: test
+  script:
+    - mvn -f project-app/pom.xml test
+build:
+  stage: build
+  script:
+    - mvn -f  project-app/pom.xml clean package 
+    - mv /builds/jan.lagarden/dhbw-projekt-app/project-app/target/project-app-1.0-SNAPSHOT-jar-with-dependencies.jar /builds/jan.lagarden/dhbw-projekt-app
+  artifacts:
+    paths: 
+      - "/builds/jan.lagarden/dhbw-projekt-app/project-app-1.0-SNAPSHOT-jar-with-dependencies.jar"
