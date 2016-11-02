@@ -1,0 +1,131 @@
+<h1 class="page-header down">Dashboard</h1>
+<br/>
+<div class="row">
+  <div class="col-lg-3 col-md-6 col-xs-12">
+    <front>
+        <div class = "row">
+          <div class="col-xs-6">
+            <i class="material-icons md-light dashboard">trending_up</i>
+          </div>
+          <div class="col-xs-6 text-xs-right">
+            <div class="title" ng-model="counter">{{counter}}</div>
+            <div class="comment">Counter</div>
+          </div>
+        </div>
+    </front>
+  </div>
+  <div class="col-lg-3 col-md-6 col-xs-12">
+    <front>
+        <div class = "row">
+          <div class="col-xs-6">
+            <i class="material-icons md-light dashboard">input</i>
+          </div>
+          <div class="col-xs-6 text-xs-right">
+            <div class="title text">milling</div>
+            <div class="comment">current action</div>
+          </div>
+        </div>
+    </front>
+  </div>
+  <div class="col-lg-3 col-md-6 col-xs-12">
+    <front>
+        <div class = "row">
+          <div class="col-xs-6">
+            <i class="material-icons md-light dashboard">whatshot</i>
+          </div>
+          <div class="col-xs-6 text-xs-right">
+            <div class="title" ng-model="temperature">{{temperature}}°C</div>
+            <div class="comment">Temperature drilling</div>
+          </div>
+        </div>
+    </front>
+  </div>
+  <div class="col-lg-3 col-md-6 col-xs-12">
+    <front>
+        <div class = "row">
+          <div class="col-xs-6">
+            <i class="material-icons md-light dashboard">network_check</i> <!--build-->
+          </div>
+          <div class="col-xs-6 text-xs-right">
+            <div class="title" ng-model="speed">{{speed}}</div>
+            <div class="comment">current speed drilling (m/s)</div>
+          </div>
+        </div>
+    </front>
+  </div>
+
+</div>
+<br/>
+<br/>
+
+<div layout="row">
+  <div flex="50">
+    <div class="chartbox" ng-init="showGraph()">
+      <div id='chart3' ></div>
+    </div>
+    </div>
+    <div flex="5"> </div>
+    <div flex="50">
+      <div class="chartbox">
+          <div id='chart4'></div>
+      </div>
+    </div>
+</div>
+<br />
+<br/>
+
+<div class="row">
+  <div class="col-lg-3 col-md-6 col-xs-12">
+    <front>
+        <div class = "row">
+          <div class="col-xs-6">
+            <i class="material-icons md-light dashboard">trending_down</i>
+          </div>
+          <div class="col-xs-6 text-xs-right">
+            <div class="title" ng-model="counter">{{counter}}</div>
+            <div class="comment">Counter rejects</div>
+          </div>
+        </div>
+    </front>
+  </div>
+  <div class="col-lg-3 col-md-6 col-xs-12">
+    <front>
+        <div class = "row">
+          <div class="col-xs-6">
+            <i class="material-icons md-light dashboard">build</i>
+          </div>
+          <div class="col-xs-6 text-xs-right">
+            <div class="title">2</div>
+            <div class="comment">current amount in production</div>
+          </div>
+        </div>
+    </front>
+  </div>
+  <div class="col-lg-3 col-md-6 col-xs-12">
+    <front>
+        <div class = "row">
+          <div class="col-xs-6">
+            <i class="material-icons md-light dashboard">whatshot</i>
+          </div>
+          <div class="col-xs-6 text-xs-right">
+            <div class="title" ng-model="temperature">{{temperature}}°C</div>
+            <div class="comment">Temperature milling</div>
+          </div>
+        </div>
+    </front>
+  </div>
+  <div class="col-lg-3 col-md-6 col-xs-12">
+    <front>
+        <div class = "row">
+          <div class="col-xs-6">
+            <i class="material-icons md-light dashboard">network_check</i> <!--build-->
+          </div>
+          <div class="col-xs-6 text-xs-right">
+            <div class="title" ng-model="speed">{{speed}}</div>
+            <div class="comment">current speed milling (m/s)</div>
+          </div>
+        </div>
+    </front>
+  </div>
+
+</div>
