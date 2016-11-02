@@ -6,8 +6,19 @@ variables:
 test:
   stage: test
   script:
-    - mvn test
+    - mvn -f # This file is a template, and might need editing before it works on your project.
+image:
+  maven:latest
+cache:
+  paths:
+    - .m2/
+variables:
+  MAVEN_OPTS: -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2
+test:
+  stage: test
+  script:
+    - mvn -f project-app/pom.xml test
 build:
   stage: build
   script:
-    - mvn clean package 
+    - mvn -f  project-app/pom.xml clean package 
