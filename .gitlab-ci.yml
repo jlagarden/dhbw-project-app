@@ -24,4 +24,4 @@ build:
     - mvn -f  project-app/pom.xml clean package 
   artifacts:
     paths: 
-      - projekt-app/target/project-app-1.0-SNAPSHOT-jar-with-dependencies.jar
+      - projekt-app/target
