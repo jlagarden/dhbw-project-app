@@ -12,10 +12,10 @@ class ProductionManager extends Actor {
     var counter : Int = 0;
 
     override def preStart(): Unit = {
-        context.actorOf(KafkaConsumer.props("127.0.0.1:2181", "prod"))
-        context.actorOf(AMQConsumer.props("tcp://127.0.0.1:61616", "m_orders"))
+        context.actorOf(KafkaConsumer.props("kafka:2181", "prod"))
+        context.actorOf(AMQConsumer.props("tcp://kafka:61616", "m_orders"))
         context.actorOf(FileConsumer.props("../tmp"))
-        kproducer = Some(context.actorOf(KafkaProducer.props("localhost:9092", "test")))
+        kproducer = Some(context.actorOf(KafkaProducer.props("kafka:9092", "test")))
     }
 
     def receive = {
