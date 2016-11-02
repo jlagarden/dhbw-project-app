@@ -13,8 +13,8 @@ class ProductionManager extends Actor {
 
     override def preStart(): Unit = {
         context.actorOf(KafkaConsumer.props("kafka:2181", "prod"))
-        context.actorOf(AMQConsumer.props("tcp://kafka:61616", "m_orders"))
-        context.actorOf(FileConsumer.props("../tmp"))
+        context.actorOf(AMQConsumer.props("tcp://activemq:61616", "m_orders"))
+        context.actorOf(FileConsumer.props("/tmp"))
         kproducer = Some(context.actorOf(KafkaProducer.props("kafka:9092", "test")))
     }
 
