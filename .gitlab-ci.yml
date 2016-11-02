@@ -1,0 +1,13 @@
+# This file is a template, and might need editing before it works on your project.
+image:
+  maven:latest
+variables:
+  MAVEN_OPTS: -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2
+test:
+  stage: test
+  script:
+    - mvn test
+build:
+  stage: build
+  script:
+    - mvn clean package 
