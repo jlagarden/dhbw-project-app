@@ -2,6 +2,7 @@ package com.project.app
 
 import com.project.production._
 import com.project.consumer._
+import com.project.analysis._
 
 import kafka.consumer._
 import kafka.message._
