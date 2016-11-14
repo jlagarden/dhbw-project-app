@@ -76,36 +76,47 @@ class ProductionManager extends Actor {
       inp match {
         case ProdData(false, _, "L1", _) => {
           current_action = inp.itemName
+          sendUpdate()
         }
         case ProdData(false, _, "L2", _) => {
           current_action = inp.itemName
+          sendUpdate()
         }
         case ProdData(false, _, "L3", _) => {
           current_action = inp.itemName
+          sendUpdate()
         }
         case ProdData(false, _, "L4", _) => {
           current_action = inp.itemName
+          sendUpdate()
         }
         case ProdData(false, _,"L5",  _) => {
           current_action = inp.itemName
+          sendUpdate()
         }
         case ProdData(_, _, "MILLING", _) => {
           current_action = inp.itemName
+          sendUpdate()
         }
         case ProdData(_, _, "MILLING_SPEED", _) => {
           speed_milling = 123.00
+          sendUpdate()
         }
         case ProdData(_, _, "MILLING_HEAT", _) => {
           temperature_milling = 123.00
+          sendUpdate()
         }
         case ProdData(_, _, "DRILLING", _) => {
           current_action = inp.itemName
+          sendUpdate()
         }
         case ProdData(_, _, "DRILLING_SPEED", _) => {
           speed_drilling = 123.00
+          sendUpdate()
         }
         case ProdData(_, _, "DRILLING_HEAT", _) => {
           temperature_drilling = 123.00
+          sendUpdate() 
         }
 
         case _ => None
