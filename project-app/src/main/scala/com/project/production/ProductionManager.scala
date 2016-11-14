@@ -128,6 +128,6 @@ class ProductionManager extends Actor {
 
       println("FUCK THIS FUCKING SHITPILE OF GARBAAAAAAAAAGE!!!!!")
       println(json)
-      kproducerlive.map(_ ! json)
+      //kproducerlive.map(_ ! json)
     }
 }
