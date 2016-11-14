@@ -55,6 +55,7 @@ class ProductionManager extends Actor {
           println(x)
         }
         case x: String => {
+            println(x)
             kproducer.map(_ ! x)
         }
 
