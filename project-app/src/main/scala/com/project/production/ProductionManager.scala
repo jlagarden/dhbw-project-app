@@ -111,11 +111,11 @@ class ProductionManager extends Actor {
           sendUpdate()
         }
         case ProdData(_, _, "DRILLING_SPEED", _) => {
-          speed_drilling = 0.0 + inp.value.asInstanceOf[Double]
+          speed_drilling = 0.0 + inp.value.doubleValue()
           sendUpdate()
         }
         case ProdData(_, _, "DRILLING_HEAT", _) => {
-          temperature_drilling = 0.0 + inp.value.asInstanceOf[Double]
+          temperature_drilling = 0.0 + inp.value.doubleValue()
           sendUpdate()
         }
 
