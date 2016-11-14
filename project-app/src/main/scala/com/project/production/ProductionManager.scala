@@ -42,20 +42,24 @@ class ProductionManager extends Actor {
                 }
             }
             liveProdData(x)
+            println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
             println(x)
         }
         case x : ERPData => {
             val item: Option[ActorRef] = products.get(counter -1)
             item.map(_ ! x)
+            println("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
             println(x)
         }
         case x: SpecData => {
           val item: Option[ActorRef] = products.get(counter -2)
           item.map(_ ! x)
+          println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
           println(x)
         }
         case x: String => {
             println(x)
+            println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
             kproducer.map(_ ! x)
         }
 
@@ -125,6 +129,7 @@ class ProductionManager extends Actor {
         ("current_action" -> current_action)
       )
 
+      println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
       println(json)
       kproducerlive.map(_ ! json)
     }
