@@ -99,11 +99,11 @@ class ProductionManager extends Actor {
           sendUpdate()
         }
         case ProdData(_, _, "MILLING_SPEED", _) => {
-          speed_milling = 123.00
+          speed_milling = inp.value
           sendUpdate()
         }
         case ProdData(_, _, "MILLING_HEAT", _) => {
-          temperature_milling = 123.00
+          temperature_milling = inp.value
           sendUpdate()
         }
         case ProdData(_, _, "DRILLING", _) => {
@@ -111,11 +111,11 @@ class ProductionManager extends Actor {
           sendUpdate()
         }
         case ProdData(_, _, "DRILLING_SPEED", _) => {
-          speed_drilling = 123.00
+          speed_drilling = inp.value
           sendUpdate()
         }
         case ProdData(_, _, "DRILLING_HEAT", _) => {
-          temperature_drilling = 123.00
+          temperature_drilling = inp.value
           sendUpdate()
         }
 
