@@ -5,10 +5,15 @@ import com.project.producer._
 import akka.actor._
 import scala.collection.mutable.HashMap
 import scala.util.{Try, Success, Failure}
+import org.json4s._
+import org.json4s.Formats._
+import org.json4s.JsonDSL._
+import org.json4s.jackson.JsonMethods
 
 class ProductionManager extends Actor {
     val products : HashMap[Int, ActorRef] = new HashMap[Int, ActorRef]
     var kproducer: Option[ActorRef] = None
+    var kproducerlive: Option[ActorRef] = None
     var counter : Int = 0;
 
     override def preStart(): Unit = {
@@ -16,6 +21,7 @@ class ProductionManager extends Actor {
         context.actorOf(AMQConsumer.props("tcp://activemq:61616", "m_orders"))
         context.actorOf(FileConsumer.props("/tmp"))
         kproducer = Some(context.actorOf(KafkaProducer.props("kafka:9092", "test")))
+        kproducerlive = Some(context.actorOf(KafkaProducer.props("kafka:9092", "live")))
     }
 
     def receive = {
@@ -35,6 +41,7 @@ class ProductionManager extends Actor {
                     item2.map(_ ! (x, y))
                 }
             }
+            liveProdData(x)
             println(x)
         }
         case x : ERPData => {
@@ -50,10 +57,74 @@ class ProductionManager extends Actor {
         case x: String => {
             kproducer.map(_ ! x)
         }
-        case x: String => {
-            kproducer.map(_ ! x)
-        }
 
         case x => println(s"unhandled $x")
+    }
+
+
+
+    def liveProdData(inp: ProdData) {
+      var current_action          = ""
+      var speed_milling           = 0.0
+      var speed_drilling          = 0.0
+      var temperature_milling     = 0.0
+      var temperature_drilling    = 0.0
+
+      val value:Option[Any] = Some(inp.value)
+      val valueAnyVal = (value match {
+          case Some(x:Double) => x
+          case _ => {}
+      })
+      val ar:Array[AnyVal] = Array[AnyVal](valueAnyVal)
+      val nar:Array[Double] = ar.map(_.asInstanceOf[Double])
+
+      inp match {
+        case ProdData(false, _, "L1", _) => {
+          current_action = inp.itemName
+        }
+        case ProdData(false, _, "L2", _) => {
+          current_action = inp.itemName
+        }
+        case ProdData(false, _, "L3", _) => {
+          current_action = inp.itemName
+        }
+        case ProdData(false, _, "L4", _) => {
+          current_action = inp.itemName
+        }
+        case ProdData(false, _,"L5",  _) => {
+          current_action = inp.itemName
+        }
+        case ProdData(_, _, "MILLING", _) => {
+          current_action = inp.itemName
+        }
+        case ProdData(_, _, "MILLING_SPEED", _) => {
+          speed_milling = nar(1)
+        }
+        case ProdData(_, _, "MILLING_HEAT", _) => {
+          temperature_milling = nar(1)
+        }
+        case ProdData(_, _, "DRILLING", _) => {
+          current_action = inp.itemName
+        }
+        case ProdData(_, _, "DRILLING_SPEED", _) => {
+          speed_drilling = nar(1)
+        }
+        case ProdData(_, _, "DRILLING_HEAT", _) => {
+          temperature_drilling = nar(1)
+        }
+
+        case _ => None
+      }
+
+      val json: JObject =  ("live_data" ->
+        ("speed_milling" -> speed_milling) ~
+        ("speed_drilling" -> speed_drilling) ~
+        ("temperature_drilling" -> temperature_drilling) ~
+        ("temperature_milling" -> temperature_milling) ~
+        ("current_action" -> current_action)
+      )
+
+      println(json)
+      kproducerlive.map(_ ! json)
     }
 }
