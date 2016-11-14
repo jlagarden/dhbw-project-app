@@ -41,7 +41,7 @@ class ProductionManager extends Actor {
                     item2.map(_ ! (x, y))
                 }
             }
-            //liveProdData(x)
+            liveProdData(x)
             println(x)
         }
         case x : ERPData => {
