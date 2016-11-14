@@ -21,7 +21,7 @@ class ProductionManager extends Actor {
         context.actorOf(AMQConsumer.props("tcp://activemq:61616", "m_orders"))
         context.actorOf(FileConsumer.props("/tmp"))
         kproducer = Some(context.actorOf(KafkaProducer.props("kafka:9092", "test")))
-        kproducerlive = Some(context.actorOf(KafkaProducer.props("kafka:9092", "live")))
+        //kproducerlive = Some(context.actorOf(KafkaProducer.props("kafka:9092", "live")))
     }
 
     def receive = {
@@ -41,7 +41,7 @@ class ProductionManager extends Actor {
                     item2.map(_ ! (x, y))
                 }
             }
-            liveProdData(x)
+            //liveProdData(x)
             println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
             println(x)
         }
@@ -68,69 +68,69 @@ class ProductionManager extends Actor {
 
 
 
-    def liveProdData(inp: ProdData) {
-      var current_action          = ""
-      var speed_milling           = 0.0
-      var speed_drilling          = 0.0
-      var temperature_milling     = 0.0
-      var temperature_drilling    = 0.0
-
-      val value:Option[Any] = Some(inp.value)
-      val valueAnyVal = (value match {
-          case Some(x:Double) => x
-          case _ => {}
-      })
-      val ar:Array[AnyVal] = Array[AnyVal](valueAnyVal)
-      val nar:Array[Double] = ar.map(_.asInstanceOf[Double])
-
-      inp match {
-        case ProdData(false, _, "L1", _) => {
-          current_action = inp.itemName
-        }
-        case ProdData(false, _, "L2", _) => {
-          current_action = inp.itemName
-        }
-        case ProdData(false, _, "L3", _) => {
-          current_action = inp.itemName
-        }
-        case ProdData(false, _, "L4", _) => {
-          current_action = inp.itemName
-        }
-        case ProdData(false, _,"L5",  _) => {
-          current_action = inp.itemName
-        }
-        case ProdData(_, _, "MILLING", _) => {
-          current_action = inp.itemName
-        }
-        case ProdData(_, _, "MILLING_SPEED", _) => {
-          speed_milling = nar(1)
-        }
-        case ProdData(_, _, "MILLING_HEAT", _) => {
-          temperature_milling = nar(1)
-        }
-        case ProdData(_, _, "DRILLING", _) => {
-          current_action = inp.itemName
-        }
-        case ProdData(_, _, "DRILLING_SPEED", _) => {
-          speed_drilling = nar(1)
-        }
-        case ProdData(_, _, "DRILLING_HEAT", _) => {
-          temperature_drilling = nar(1)
-        }
-
-        case _ => None
-      }
-
-      val json: JObject =  ("live_data" ->
-        ("speed_milling" -> speed_milling) ~
-        ("speed_drilling" -> speed_drilling) ~
-        ("temperature_drilling" -> temperature_drilling) ~
-        ("temperature_milling" -> temperature_milling) ~
-        ("current_action" -> current_action)
-      )
-
-      println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
-      println(json)
-      kproducerlive.map(_ ! json)
-    }
+    // def liveProdData(inp: ProdData) {
+    //   var current_action          = ""
+    //   var speed_milling           = 0.0
+    //   var speed_drilling          = 0.0
+    //   var temperature_milling     = 0.0
+    //   var temperature_drilling    = 0.0
+    //
+    //   val value:Option[Any] = Some(inp.value)
+    //   val valueAnyVal = (value match {
+    //       case Some(x:Double) => x
+    //       case _ => {}
+    //   })
+    //   val ar:Array[AnyVal] = Array[AnyVal](valueAnyVal)
+    //   val nar:Array[Double] = ar.map(_.asInstanceOf[Double])
+    //
+    //   inp match {
+    //     case ProdData(false, _, "L1", _) => {
+    //       current_action = inp.itemName
+    //     }
+    //     case ProdData(false, _, "L2", _) => {
+    //       current_action = inp.itemName
+    //     }
+    //     case ProdData(false, _, "L3", _) => {
+    //       current_action = inp.itemName
+    //     }
+    //     case ProdData(false, _, "L4", _) => {
+    //       current_action = inp.itemName
+    //     }
+    //     case ProdData(false, _,"L5",  _) => {
+    //       current_action = inp.itemName
+    //     }
+    //     case ProdData(_, _, "MILLING", _) => {
+    //       current_action = inp.itemName
+    //     }
+    //     case ProdData(_, _, "MILLING_SPEED", _) => {
+    //       speed_milling = nar(1)
+    //     }
+    //     case ProdData(_, _, "MILLING_HEAT", _) => {
+    //       temperature_milling = nar(1)
+    //     }
+    //     case ProdData(_, _, "DRILLING", _) => {
+    //       current_action = inp.itemName
+    //     }
+    //     case ProdData(_, _, "DRILLING_SPEED", _) => {
+    //       speed_drilling = nar(1)
+    //     }
+    //     case ProdData(_, _, "DRILLING_HEAT", _) => {
+    //       temperature_drilling = nar(1)
+    //     }
+    //
+    //     case _ => None
+    //   }
+    //
+    //   val json: JObject =  ("live_data" ->
+    //     ("speed_milling" -> speed_milling) ~
+    //     ("speed_drilling" -> speed_drilling) ~
+    //     ("temperature_drilling" -> temperature_drilling) ~
+    //     ("temperature_milling" -> temperature_milling) ~
+    //     ("current_action" -> current_action)
+    //   )
+    //
+    //   println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
+    //   println(json)
+    //   kproducerlive.map(_ ! json)
+    // }
 }
