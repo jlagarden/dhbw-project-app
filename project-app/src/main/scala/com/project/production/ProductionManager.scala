@@ -72,6 +72,7 @@ class ProductionManager extends Actor {
       var temperature_milling     = 100.0
       var temperature_drilling    = 73.0
       println("inp:   " + inp)
+      println(inp.itemName)
       inp match {
         case ProdData(false, _, "L1", _) => {
           current_action = inp.itemName
