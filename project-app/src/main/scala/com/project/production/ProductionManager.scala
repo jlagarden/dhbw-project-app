@@ -125,7 +125,7 @@ class ProductionManager extends Actor {
         // ("temperature_drilling" -> temperature_drilling) ~
         // ("temperature_milling" -> temperature_milling) ~
         // ("current_action" -> current_action)
-      )
+        // )
 
       println("FUCK THIS FUCKING SHITPILE OF GARBAAAAAAAAAGE!!!!!")
       println(json)
