@@ -67,7 +67,6 @@ case class ProdData private (val value: Any, val status: String, val itemName : 
             case ProdData(_,_,_,_) => Undefined
         }
     }
-
 }
 
 object ProdData {
