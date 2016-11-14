@@ -72,7 +72,7 @@ class ProductionManager extends Actor {
 
     def liveProdData(inp: ProdData) {
       println("inp:   " + inp)
-      println(inp.itemName)
+      println(inp.value)
       inp match {
         case ProdData(false, _, "L1", _) => {
           current_action = inp.itemName
