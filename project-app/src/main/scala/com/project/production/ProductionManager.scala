@@ -21,7 +21,7 @@ class ProductionManager extends Actor {
         context.actorOf(AMQConsumer.props("tcp://activemq:61616", "m_orders"))
         context.actorOf(FileConsumer.props("/tmp"))
         kproducer = Some(context.actorOf(KafkaProducer.props("kafka:9092", "test")))
-        //kproducerlive = Some(context.actorOf(KafkaProducer.props("kafka:9092", "live")))
+        kproducerlive = Some(context.actorOf(KafkaProducer.props("kafka:9092", "live")))
     }
 
     def receive = {
@@ -67,10 +67,10 @@ class ProductionManager extends Actor {
 
     def liveProdData(inp: ProdData) {
       var current_action          = ""
-      var speed_milling           = 0.0
-      var speed_drilling          = 0.0
-      var temperature_milling     = 0.0
-      var temperature_drilling    = 0.0
+      var speed_milling           = 50.0
+      var speed_drilling          = 70.0
+      var temperature_milling     = 100.0
+      var temperature_drilling    = 73.0
 
       // val value:Option[Any] = Some(inp.value)
       // val valueAnyVal = (value match {
@@ -118,17 +118,8 @@ class ProductionManager extends Actor {
       //   case _ => None
       // }
 
-        val json: String = "{\"live_data\":{\"speed_milling\":"+speed_milling+",\"speed_drilling\":"+speed_drilling+",\"temperature_drilling\":"+temperature_drilling+",\"temperature_milling\":"+temperature_milling+",\"current_action\":\""+current_action+"\"}}"
-        //   ("live_data" ->
-        // ("speed_milling" -> speed_milling) ~
-        // ("speed_drilling" -> speed_drilling) ~
-        // ("temperature_drilling" -> temperature_drilling) ~
-        // ("temperature_milling" -> temperature_milling) ~
-        // ("current_action" -> current_action)
-        // )
-
-      println("FUCK THIS FUCKING SHITPILE OF GARBAAAAAAAAAGE!!!!!")
+      val json: String = "{\"live_data\":{\"speed_milling\":"+speed_milling+",\"speed_drilling\":"+speed_drilling+",\"temperature_drilling\":"+temperature_drilling+",\"temperature_milling\":"+temperature_milling+",\"current_action\":\""+current_action+"\"}}"
       println(json)
-      //kproducerlive.map(_ ! json)
+      kproducerlive.map(_ ! json)
     }
 }
