@@ -15,6 +15,11 @@ class ProductionManager extends Actor {
     var kproducer: Option[ActorRef] = None
     var kproducerlive: Option[ActorRef] = None
     var counter : Int = 0;
+    var current_action          = ""
+    var speed_milling           = 50.0
+    var speed_drilling          = 70.0
+    var temperature_milling     = 100.0
+    var temperature_drilling    = 73.0
 
     override def preStart(): Unit = {
         context.actorOf(KafkaConsumer.props("kafka:2181", "prod"))
@@ -66,11 +71,6 @@ class ProductionManager extends Actor {
 
 
     def liveProdData(inp: ProdData) {
-      var current_action          = ""
-      var speed_milling           = 50.0
-      var speed_drilling          = 70.0
-      var temperature_milling     = 100.0
-      var temperature_drilling    = 73.0
       println("inp:   " + inp)
       println(inp.itemName)
       inp match {
@@ -116,7 +116,7 @@ class ProductionManager extends Actor {
         }
         case ProdData(_, _, "DRILLING_HEAT", _) => {
           temperature_drilling = 123.00
-          sendUpdate() 
+          sendUpdate()
         }
 
         case _ => None
