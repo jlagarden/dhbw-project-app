@@ -60,7 +60,7 @@ class ProductionManager extends Actor {
           println(x)
         }
         case x: String => {
-            println("kproducter:")
+            println("kproducer:")
             println(x)
             kproducer.map(_ ! x)
         }
@@ -71,8 +71,6 @@ class ProductionManager extends Actor {
 
 
     def liveProdData(inp: ProdData) {
-      println("inp:   " + inp)
-      println(inp.value)
       inp match {
         case ProdData(false, _, "L1", _) => {
           current_action = inp.itemName
@@ -124,7 +122,7 @@ class ProductionManager extends Actor {
 
       def sendUpdate() {
         val json: String = "{\"live_data\":{\"speed_milling\":"+speed_milling+",\"speed_drilling\":"+speed_drilling+",\"temperature_drilling\":"+temperature_drilling+",\"temperature_milling\":"+temperature_milling+",\"current_action\":\""+current_action+"\"}}"
-        println(json)
+        println("kproducerlive: " + json)
         kproducerlive.map(_ ! json)
       }
     }
