@@ -118,16 +118,17 @@ class ProductionManager extends Actor {
       //   case _ => None
       // }
 
-      val json: JObject =  ("live_data" ->
-        ("speed_milling" -> speed_milling) ~
-        ("speed_drilling" -> speed_drilling) ~
-        ("temperature_drilling" -> temperature_drilling) ~
-        ("temperature_milling" -> temperature_milling) ~
-        ("current_action" -> current_action)
+        val json: String = "{\"live_data\":{\"speed_milling\""+speed_milling+",\"speed_drilling\":"+speed_drilling+",\"temperature_drilling\":"+temperature_drilling+",\"temperature_milling\":"+temperature_milling+",\"current_action\":"+current_action+"}}"
+        //   ("live_data" ->
+        // ("speed_milling" -> speed_milling) ~
+        // ("speed_drilling" -> speed_drilling) ~
+        // ("temperature_drilling" -> temperature_drilling) ~
+        // ("temperature_milling" -> temperature_milling) ~
+        // ("current_action" -> current_action)
       )
 
       println("FUCK THIS FUCKING SHITPILE OF GARBAAAAAAAAAGE!!!!!")
-      println(compact(render(json)))
+      println(json)
       //kproducerlive.map(_ ! json)
     }
 }
