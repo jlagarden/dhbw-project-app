@@ -99,7 +99,7 @@ class ProductionManager extends Actor {
           sendUpdate()
         }
         case ProdData(_, _, "MILLING_SPEED", _) => {
-          speed_milling = inp.value.num.doubleValue()
+          speed_milling = inp.value.asInstanceOf[BigInt].doubleValue()
           sendUpdate()
         }
         case ProdData(_, _, "MILLING_HEAT", _) => {
@@ -111,7 +111,7 @@ class ProductionManager extends Actor {
           sendUpdate()
         }
         case ProdData(_, _, "DRILLING_SPEED", _) => {
-          speed_drilling = 0.0 + inp.value.int.doubleValue()
+          speed_drilling = 0.0 + inp.value.asInstanceOf[BigInt].doubleValue()
           sendUpdate()
         }
         case ProdData(_, _, "DRILLING_HEAT", _) => {
