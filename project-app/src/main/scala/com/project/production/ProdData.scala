@@ -57,12 +57,12 @@ case class ProdData private (val value: Any, val status: String, val itemName : 
             case ProdData(true, _, "L4", _) => L4Receiving
             case ProdData(false, _,"L5",  _) => L5NonReceiving
             case ProdData(true, _, "L5", _) => L5Receiving
-            case ProdData(_, _, "MILLING", _) => InMillingStation
-            case ProdData(_, _, "MILLING_SPEED", _) => InMillingStation
-            case ProdData(_, _, "MILLING_HEAT", _) => InMillingStation
-            case ProdData(_, _, "DRILLING", _) => InDrillingStation
-            case ProdData(_, _, "DRILLING_SPEED", _) => InDrillingStation
-            case ProdData(_, _, "DRILLING_HEAT", _) => InDrillingStation
+            case ProdData(_, _, "MILLING", _) => MillingStationActive
+            case ProdData(_, _, "MILLING_SPEED", _) => MillingStationActive
+            case ProdData(_, _, "MILLING_HEAT", _) => MillingStationActive
+            case ProdData(_, _, "DRILLING", _) => DrillingStationActive
+            case ProdData(_, _, "DRILLING_SPEED", _) => DrillingStationActive
+            case ProdData(_, _, "DRILLING_HEAT", _) => DrillingStationActive
 
             case ProdData(_,_,_,_) => Undefined
         }
