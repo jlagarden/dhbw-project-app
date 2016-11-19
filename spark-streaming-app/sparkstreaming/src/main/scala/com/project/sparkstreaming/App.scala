@@ -154,5 +154,5 @@ class KafkaSink extends Serializable {
   val config = new ProducerConfig(props)
   val producer = new Producer[String, String](config)
 
-  def send(value: String): Unit = producer.send(new KeyedMessage[String, String]("sparkout", "kafka:9092", value))
+  def send(value: String): Unit = producer.send(new KeyedMessage[String, String]("customer", "kafka:9092", value))
 }
