@@ -115,46 +115,6 @@ object App {
     d.foldLeft(0d)(_ + _)/d.length
   }
 
-  def avgDrillS(data: List[ProdData]): Double = {
-    val dspeed = data.filter(_  match {
-        case ProdData(x: Double, _, "DRILLING_SPEED", _) => true
-        case _ => false
-    }).map(_.value.asInstanceOf[Double])
-
-    dspeed.foldLeft(0d)(_ + _)/dspeed.length
-  }
-
-  // Average Drilling Heat
-  def avgDrillH(data: List[ProdData]): Double = {
-    val dheat = data.filter(_  match {
-        case ProdData(x: Double, _, "DRILLING_HEAT", _) => true
-        case _ => false
-    }).map(_.value.asInstanceOf[Double])
-
-    dheat.foldLeft(0d)(_ + _)/dheat.length
-  }
-
-  // Average Milling Speed
-  def avgMillS(data: List[ProdData]): Double = {
-    val mspeed = data.filter(_  match {
-        case ProdData(x: Double, _, "MILLING_SPEED", _) => true
-        case _ => false
-    }).map(_.value.asInstanceOf[Double])
-
-    mspeed.foldLeft(0d)(_ + _)/mspeed.length
-  }
-
-  // Average Milling Heat
-  def avgMillH(data: List[ProdData]): Double = {
-    val mheat = data.filter(_  match {
-        case ProdData(x: Double, _, "MILLING_HEAT", _) => true
-        case _ => false
-    }).map(_.value.asInstanceOf[Double])
-
-    mheat.foldLeft(0d)(_ + _)/mheat.length
-  }
-
-
   // main Method, setup and start SparkStreaming Application
   def main(args: Array[String]) {
     // setup SparkContext
