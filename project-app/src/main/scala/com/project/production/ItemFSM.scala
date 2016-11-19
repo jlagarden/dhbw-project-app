@@ -38,7 +38,7 @@ class ItemFSM extends FSM[State, Queue[ProdData]] {
 
     when(InMillingStation) {
         case Event((L3Receiving, x: ProdData), state) => goto(Transporting2) using state.enqueue(x)
-        case Event((InMillingStation, x: ProdData), state) => stay() using state.enqueue(x)
+        case Event((MillingStationActive, x: ProdData), state) => stay() using state.enqueue(x)
     }
 
     when(Transporting2) {
@@ -47,7 +47,7 @@ class ItemFSM extends FSM[State, Queue[ProdData]] {
 
     when(InDrillingStation) {
         case Event((L4Receiving, x: ProdData), state) => goto(SlideFeeding2) using state.enqueue(x)
-        case Event((InDrillingStation, x: ProdData), state) => stay() using state.enqueue(x)
+        case Event((DrillingStationActive, x: ProdData), state) => stay() using state.enqueue(x)
     }
 
     when(SlideFeeding2) {
