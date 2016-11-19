@@ -105,7 +105,16 @@ object App {
     (end.reduce(_ + _) - start.reduce(_ + _))/count
   }
 
-  // Average Drilling Speed
+  // Average Drilling/Milling Speed/Heat
+  def avgDMSH(data: List[ProdData], datatype: String): Double = {
+    val d = data.filter(_  match {
+        case ProdData(x: Double, _, datatype, _) => true
+        case _ => false
+    }).map(_.value.asInstanceOf[Double])
+
+    d.foldLeft(0d)(_ + _)/d.length
+  }
+
   def avgDrillS(data: List[ProdData]): Double = {
     val dspeed = data.filter(_  match {
         case ProdData(x: Double, _, "DRILLING_SPEED", _) => true
@@ -206,11 +215,12 @@ object App {
     val bymaterial = itemstream.map(record => (record.erpData.materialNumber, record))
     val amount     = bymaterial.map(x => (x._1, 1)).reduceByKey(_ + _)
     val rejects    = bymaterial.map(x => ((x._1, x._2.specData.overallStatus),1)).reduceByKey(_ + _).map(x => (x._1._1, x._1._2, x._2)).filter(x => x._2 != "OK").map(x => (x._1,x._3))
-    val prodtime   = bymaterial.map(x => (x._1, x._2.prodData)).reduceByKey((a , b) => a ++ b).map(x => (x._1, avgProdT(x._2)))
-    val avg_spd_d  = bymaterial.map(x => (x._1, x._2.prodData)).reduceByKey((a , b) => a ++ b).map(x => (x._1, avgDrillS(x._2)))
-    val avg_tmp_d  = bymaterial.map(x => (x._1, x._2.prodData)).reduceByKey((a , b) => a ++ b).map(x => (x._1, avgDrillH(x._2)))
-    val avg_spd_m  = bymaterial.map(x => (x._1, x._2.prodData)).reduceByKey((a , b) => a ++ b).map(x => (x._1, avgMillS(x._2)))
-    val avg_tmp_m  = bymaterial.map(x => (x._1, x._2.prodData)).reduceByKey((a , b) => a ++ b).map(x => (x._1, avgMillH(x._2)))
+    val proddata   = bymaterial.map(x => (x._1, x._2.prodData)).reduceByKey(_ ++ _)
+    val prodtime   = proddata.map(x => (x._1, avgProdT(x._2)))
+    val avg_spd_d  = proddata.map(x => (x._1, avgDMSH(x._2, "DRILLING_SPEED")))
+    val avg_tmp_d  = proddata.map(x => (x._1, avgDMSH(x._2, "DRILLING_HEAT")))
+    val avg_spd_m  = proddata.map(x => (x._1, avgDMSH(x._2, "MILLING_SPEED")))
+    val avg_tmp_m  = proddata.map(x => (x._1, avgDMSH(x._2, "MILLING_HEAT")))
 
     // Join material data together
     val mjoin = prodtime.join(amount).leftOuterJoin(rejects).join(avg_tmp_d).join(avg_spd_d).join(avg_tmp_m).join(avg_spd_m)
@@ -218,20 +228,22 @@ object App {
     val mresult = mjoin.map(x => (x._1, x._2._1._1._1._1._1._1, x._2._1._1._1._1._1._2, x._2._1._1._1._1._2, x._2._1._1._1._2, x._2._1._1._2, x._2._1._2, x._2._2)).map(x => MaterialData(x._1.toInt, x._3.toInt, x._4.getOrElse(0), x._2, x._5, x._6, x._7, x._8))
     mresult.print()
 
+    val kafkaSink = sc.broadcast(new KafkaSink())
+
     mresult.foreachRDD(item => {
       item.foreach(message => {
-        val kafkaSink = new KafkaSink()
+        //val kafkaSink = new KafkaSink()
         implicit val formats = Serialization.formats(NoTypeHints)
-        kafkaSink.send("material", write(message))
+        kafkaSink.value.send("material", write(message))
       })
     })
 
 
     cresult.foreachRDD(item => {
       item.foreach(message => {
-        val kafkaSink = new KafkaSink()
+        //val kafkaSink = new KafkaSink()
         implicit val formats = Serialization.formats(NoTypeHints)
-        kafkaSink.send("customer", write(message))
+        kafkaSink.value.send("customer", write(message))
       })
     })
 
@@ -243,12 +255,22 @@ object App {
 
 class KafkaSink extends Serializable {
 
-  val props = new Properties()
-  props.put("metadata.broker.list", "kafka:9092")
-  props.put("serializer.class", "kafka.serializer.StringEncoder")
-  props.put("producer.type", "async")
-  val config = new ProducerConfig(props)
-  val producer = new Producer[String, String](config)
+  lazy val producer = createProducer()
+
+  def createProducer() = {
+    val props = new Properties()
+    props.put("metadata.broker.list", "kafka:9092")
+    props.put("serializer.class", "kafka.serializer.StringEncoder")
+    props.put("producer.type", "async")
+    val config = new ProducerConfig(props)
+    val producer = new Producer[String, String](config)
+
+    sys.addShutdownHook {
+        producer.close()
+    }
+
+    producer
+  }
 
   def send(topic: String, value: String): Unit = producer.send(new KeyedMessage[String, String](topic, "kafka:9092", value))
 }
