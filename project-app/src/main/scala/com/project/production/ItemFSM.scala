@@ -9,7 +9,7 @@ import org.json4s.native.JsonMethods._
 import scala.collection.immutable.Queue
 
 class ItemFSM extends FSM[State, Queue[ProdData]] {
-    // Zustandsautomat: Start -> L1 -> Transporting1 -> L2 -> SlideFeeding1 -> InMillingStationn -> Transporting2 -> InDrillingStationn -> Schieben2 -> L5 -> Ende
+    // Zustandsautomat: Start -> L1 -> Transporting1 -> L2 -> SlideFeeding1 -> InMillingStation -> Transporting2 -> InDrillingStation -> Schieben2 -> L5 -> End
 
     startWith(Start, Queue[ProdData]())
 
@@ -33,19 +33,19 @@ class ItemFSM extends FSM[State, Queue[ProdData]] {
     }
 
     when(SlideFeeding1) {
-        case Event((L3NonReceiving, x: ProdData), state) => goto(InMillingStationn) using state.enqueue(x)
+        case Event((L3NonReceiving, x: ProdData), state) => goto(InMillingStation) using state.enqueue(x)
     }
 
-    when(InMillingStationn) {
+    when(InMillingStation) {
         case Event((L3Receiving, x: ProdData), state) => goto(Transporting2) using state.enqueue(x)
         case Event((InMillingStation, x: ProdData), state) => stay() using state.enqueue(x)
     }
 
     when(Transporting2) {
-        case Event((L4NonReceiving, x: ProdData), state) => goto(InDrillingStationn) using state.enqueue(x)
+        case Event((L4NonReceiving, x: ProdData), state) => goto(InDrillingStation) using state.enqueue(x)
     }
 
-    when(InDrillingStationn) {
+    when(InDrillingStation) {
         case Event((L4Receiving, x: ProdData), state) => goto(SlideFeeding2) using state.enqueue(x)
         case Event((InDrillingStation, x: ProdData), state) => stay() using state.enqueue(x)
     }
@@ -56,12 +56,12 @@ class ItemFSM extends FSM[State, Queue[ProdData]] {
 
     when(L5Interrupted) {
         case Event((L5Receiving, x: ProdData), state) => {
-            println("Ende")
+            println("End")
             stop(FSM.Normal, state.enqueue(x))
         }
     }
 
-    when(Ende) {
+    when(End) {
         case Event(_,_) => stay()
     }
 

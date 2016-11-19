@@ -17,8 +17,8 @@ case object L2Interrupted       extends State
 case object L5Interrupted       extends State
 case object Transporting1       extends State
 case object Transporting2       extends State
-case object InDrillingStationn  extends State
-case object InMillingStationn   extends State
+case object InDrillingStation  extends State
+case object InMillingStation   extends State
 case object SlideFeeding1       extends State
 case object SlideFeeding2       extends State
-case object Ende                extends State
+case object End                 extends State

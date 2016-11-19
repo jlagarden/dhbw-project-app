@@ -10,16 +10,16 @@ import scala.collection.immutable.Queue
 
 // events
 sealed trait ProdEvent
-case object L1NonReceiving             extends ProdEvent
-case object L1Receiving              extends ProdEvent
-case object L2NonReceiving             extends ProdEvent
-case object L2Receiving              extends ProdEvent
-case object L3NonReceiving             extends ProdEvent
-case object L3Receiving              extends ProdEvent
-case object L4NonReceiving             extends ProdEvent
-case object L4Receiving              extends ProdEvent
-case object L5NonReceiving             extends ProdEvent
-case object L5Receiving              extends ProdEvent
-case object InMillingStation              extends ProdEvent
-case object InDrillingStation               extends ProdEvent
-case object Undefined           extends ProdEvent
+case object L1NonReceiving              extends ProdEvent
+case object L1Receiving                 extends ProdEvent
+case object L2NonReceiving              extends ProdEvent
+case object L2Receiving                 extends ProdEvent
+case object L3NonReceiving              extends ProdEvent
+case object L3Receiving                 extends ProdEvent
+case object L4NonReceiving              extends ProdEvent
+case object L4Receiving                 extends ProdEvent
+case object L5NonReceiving              extends ProdEvent
+case object L5Receiving                 extends ProdEvent
+case object InMillingStation            extends ProdEvent
+case object InDrillingStation           extends ProdEvent
+case object Undefined                   extends ProdEvent
