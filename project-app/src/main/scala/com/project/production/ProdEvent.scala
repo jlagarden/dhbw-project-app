@@ -20,6 +20,6 @@ case object L4NonReceiving              extends ProdEvent
 case object L4Receiving                 extends ProdEvent
 case object L5NonReceiving              extends ProdEvent
 case object L5Receiving                 extends ProdEvent
-case object InMillingStation            extends ProdEvent
-case object InDrillingStation           extends ProdEvent
+case object MillingStationActive        extends ProdEvent
+case object DrillingStationActive       extends ProdEvent
 case object Undefined                   extends ProdEvent
