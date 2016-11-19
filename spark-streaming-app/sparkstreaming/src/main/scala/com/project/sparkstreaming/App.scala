@@ -30,6 +30,7 @@ case class ItemData(val erpData: ERPData, val specData: SpecData, val prodData: 
 
 // Result Datastructures
 case class CustomerData(val number: Int, val amountorders: Int, val materialnumber: Int, val avgrejects: Float, val amountorderedmaterial: Int)
+case class MaterialData(val number: Int, val amount: Int, val rejects: Int, val prodtime: Double, val avg_temperature_drilling: Double, val avg_speed_drilling: Double, val avg_temperature_milling: Double, val avg_speed_milling: Double)
 
 object App {
 
@@ -79,12 +80,71 @@ object App {
     if ((input \ "value").isInstanceOf[JBool])
       value = (input \ "value").asInstanceOf[JBool].value
     if ((input \ "value").isInstanceOf[JInt])
-      value = (input \ "value").asInstanceOf[JInt].num
+      value = (input \ "value").asInstanceOf[JInt].num.doubleValue
+    if ((input \ "value").isInstanceOf[JDouble])
+      value = (input \ "value").asInstanceOf[JDouble].num
     val status = (input \ "status").asInstanceOf[JString].s
     val itemName = (input \ "itemName").asInstanceOf[JString].s
     val timestamp = (input \ "timestamp").asInstanceOf[JInt].num.intValue
     new ProdData(value,status,itemName,timestamp)
   }
+
+  // Average Production Time
+  def avgProdT(data: List[ProdData]): Float = {
+    val start = data.filter(_ match {
+        case ProdData(false, _, "L1", _)  => true
+        case _ => false
+    }).map(_.timestamp)
+
+    val end = data.filter(_ match {
+        case ProdData(true, _, "L5", _)  => true
+        case _ => false
+    }).map(_.timestamp)
+
+    val count = start.length
+    (end.reduce(_ + _) - start.reduce(_ + _))/count
+  }
+
+  // Average Drilling Speed
+  def avgDrillS(data: List[ProdData]): Double = {
+    val dspeed = data.filter(_  match {
+        case ProdData(x: Double, _, "DRILLING_SPEED", _) => true
+        case _ => false
+    }).map(_.value.asInstanceOf[Double])
+
+    dspeed.foldLeft(0d)(_ + _)/dspeed.length
+  }
+
+  // Average Drilling Heat
+  def avgDrillH(data: List[ProdData]): Double = {
+    val dheat = data.filter(_  match {
+        case ProdData(x: Double, _, "DRILLING_HEAT", _) => true
+        case _ => false
+    }).map(_.value.asInstanceOf[Double])
+
+    dheat.foldLeft(0d)(_ + _)/dheat.length
+  }
+
+  // Average Milling Speed
+  def avgMillS(data: List[ProdData]): Double = {
+    val mspeed = data.filter(_  match {
+        case ProdData(x: Double, _, "MILLING_SPEED", _) => true
+        case _ => false
+    }).map(_.value.asInstanceOf[Double])
+
+    mspeed.foldLeft(0d)(_ + _)/mspeed.length
+  }
+
+  // Average Milling Heat
+  def avgMillH(data: List[ProdData]): Double = {
+    val mheat = data.filter(_  match {
+        case ProdData(x: Double, _, "MILLING_HEAT", _) => true
+        case _ => false
+    }).map(_.value.asInstanceOf[Double])
+
+    mheat.foldLeft(0d)(_ + _)/mheat.length
+  }
+
 
   // main Method, setup and start SparkStreaming Application
   def main(args: Array[String]) {
@@ -131,11 +191,47 @@ object App {
     val cresult = stream2.join(stream1,1).map(x => CustomerData(x._1.toInt,x._2._2._2,x._2._2._1.toInt,0,x._2._1))
     cresult.print()
 
+    // aggregate Material Data
+    /*
+    number: 4728,
+        amount: 4,
+        rejects: 1,
+        prodtime: 22.4,
+        avg_temperature_drilling: 135.6,
+        avg_speed_drilling: 67.5,
+        avg_temperature_milling: 111.6,
+        avg_speed_milling: 88.6
+    */
+    val itemstream = jsvals.map(record => ItemData(getErpData(record), getSpecData(record), getProdDataList(record)))
+    val bymaterial = itemstream.map(record => (record.erpData.materialNumber, record))
+    val amount     = bymaterial.map(x => (x._1, 1)).reduceByKey(_ + _)
+    val rejects    = bymaterial.map(x => ((x._1, x._2.specData.overallStatus),1)).reduceByKey(_ + _).map(x => (x._1._1, x._1._2, x._2)).filter(x => x._2 != "OK").map(x => (x._1,x._3))
+    val prodtime   = bymaterial.map(x => (x._1, x._2.prodData)).reduceByKey((a , b) => a ++ b).map(x => (x._1, avgProdT(x._2)))
+    val avg_spd_d  = bymaterial.map(x => (x._1, x._2.prodData)).reduceByKey((a , b) => a ++ b).map(x => (x._1, avgDrillS(x._2)))
+    val avg_tmp_d  = bymaterial.map(x => (x._1, x._2.prodData)).reduceByKey((a , b) => a ++ b).map(x => (x._1, avgDrillH(x._2)))
+    val avg_spd_m  = bymaterial.map(x => (x._1, x._2.prodData)).reduceByKey((a , b) => a ++ b).map(x => (x._1, avgMillS(x._2)))
+    val avg_tmp_m  = bymaterial.map(x => (x._1, x._2.prodData)).reduceByKey((a , b) => a ++ b).map(x => (x._1, avgMillH(x._2)))
+
+    // Join material data together
+    val mjoin = prodtime.join(amount).leftOuterJoin(rejects).join(avg_spd_d).join(avg_tmp_d).join(avg_tmp_m).join(avg_spd_m)
+    // (8414,((((((392410.0,1),None),11333.333333333334),233.4762),9160.0),154.71416666666667))
+    val mresult = mjoin.map(x => (x._1, x._2._1._1._1._1._1._1, x._2._1._1._1._1._1._2, x._2._1._1._1._1._2, x._2._1._1._1._2, x._2._1._1._2, x._2._1._2, x._2._2)).map(x => MaterialData(x._1.toInt, x._3.toInt, x._4.getOrElse(0), x._2, x._5, x._6, x._7, x._8))
+    mresult.print()
+
+    mresult.foreachRDD(item => {
+      item.foreach(message => {
+        val kafkaSink = new KafkaSink()
+        implicit val formats = Serialization.formats(NoTypeHints)
+        kafkaSink.send("material", write(message))
+      })
+    })
+
+
     cresult.foreachRDD(item => {
       item.foreach(message => {
         val kafkaSink = new KafkaSink()
         implicit val formats = Serialization.formats(NoTypeHints)
-        kafkaSink.send(write(message))
+        kafkaSink.send("customer", write(message))
       })
     })
 
@@ -154,5 +250,5 @@ class KafkaSink extends Serializable {
   val config = new ProducerConfig(props)
   val producer = new Producer[String, String](config)
 
-  def send(value: String): Unit = producer.send(new KeyedMessage[String, String]("sparkout", "kafka:9092", value))
+  def send(topic: String, value: String): Unit = producer.send(new KeyedMessage[String, String](topic, "kafka:9092", value))
 }
