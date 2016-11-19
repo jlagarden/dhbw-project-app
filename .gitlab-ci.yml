@@ -23,6 +23,9 @@ build:
   script:
     - mvn -f  project-app/pom.xml clean package 
     - mv /builds/jan.lagarden/dhbw-projekt-app/project-app/target/project-app-1.0-SNAPSHOT-jar-with-dependencies.jar /builds/jan.lagarden/dhbw-projekt-app
+    - mvn -f spark-streaming-app/sparkstreaming/pom.xml clean package
+    - mv /builds/jan.lagarden/dhbw-projekt-app/spark-streaming-app/sparkstreaming/target/sparkstreaming-1-jar-with-dependencies.jar /builds/jan.lagarden/dhbw-projekt-app
   artifacts:
     paths: 
       - "/builds/jan.lagarden/dhbw-projekt-app/project-app-1.0-SNAPSHOT-jar-with-dependencies.jar"
+      - "/builds/jan.lagarden/dhbw-projekt-app/sparkstreaming-1-jar-with-dependencies.jar"
