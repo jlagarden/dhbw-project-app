@@ -213,7 +213,7 @@ object App {
     val avg_tmp_m  = bymaterial.map(x => (x._1, x._2.prodData)).reduceByKey((a , b) => a ++ b).map(x => (x._1, avgMillH(x._2)))
 
     // Join material data together
-    val mjoin = prodtime.join(amount).leftOuterJoin(rejects).join(avg_spd_d).join(avg_tmp_d).join(avg_tmp_m).join(avg_spd_m)
+    val mjoin = prodtime.join(amount).leftOuterJoin(rejects).join(avg_tmp_d).join(avg_spd_d).join(avg_tmp_m).join(avg_spd_m)
     // (8414,((((((392410.0,1),None),11333.333333333334),233.4762),9160.0),154.71416666666667))
     val mresult = mjoin.map(x => (x._1, x._2._1._1._1._1._1._1, x._2._1._1._1._1._1._2, x._2._1._1._1._1._2, x._2._1._1._1._2, x._2._1._1._2, x._2._1._2, x._2._2)).map(x => MaterialData(x._1.toInt, x._3.toInt, x._4.getOrElse(0), x._2, x._5, x._6, x._7, x._8))
     mresult.print()
