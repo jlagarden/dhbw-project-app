@@ -148,16 +148,13 @@ object App {
     val specstream = jsvals.map(record => getSpecData(record))
     val prodstream = jsvals.map(record => getProdDataList(record)).flatMap(x => x)
 
-    // print out the streams (for debugging)
-    // specstream.print()
-    // erpstream.print()
-    // prodstream.print()
-
     // aggregate Data By Customer
     val stream1 = erpstream.map(x => ((x.customerNumber, x.materialNumber), 1)).reduceByKey(_ + _).map(x => (x._1._1,(x._1._2,x._2)))
     val stream2 = erpstream.map(x => (x.customerNumber, 1)).reduceByKey(_ + _)
-    // join both streams together
-    val cresult = stream2.join(stream1,1).map(x => CustomerData(x._1.toInt,x._2._2._2,x._2._2._1.toInt,0,x._2._1))
+    val stream3 = jsvals.map(record => (getErpData(record),getSpecData(record))).map(x => (x._1.customerNumber, x._2.overallStatus)).filter(x => x._2 != "OK").map(x => (x._1, 1)).reduceByKey(_ +_)
+
+    // join customer data 
+    val cresult = stream2.join(stream1,1).leftOuterJoin(stream3).map(x => (x._1.toInt,x._2._1._2._2,x._2._1._2._1.toInt,x._2._2.getOrElse(0)/x._2._1._2._2,x._2._1._1)).map(x => CustomerData(x._1,x._2,x._3,x._4,x._5))
     cresult.print()
 
     // aggregate Material Data
@@ -174,7 +171,6 @@ object App {
 
     // Join material data together
     val mjoin = prodtime.join(amount).leftOuterJoin(rejects).join(avg_tmp_d).join(avg_spd_d).join(avg_tmp_m).join(avg_spd_m)
-    // (8414,((((((392410.0,1),None),11333.333333333334),233.4762),9160.0),154.71416666666667))
     val mresult = mjoin.map(x => (x._1, x._2._1._1._1._1._1._1, x._2._1._1._1._1._1._2, x._2._1._1._1._1._2, x._2._1._1._1._2, x._2._1._1._2, x._2._1._2, x._2._2)).map(x => MaterialData(x._1.toInt, x._3.toInt, x._4.getOrElse(0), x._2, x._5, x._6, x._7, x._8))
     mresult.print()
 
@@ -187,7 +183,6 @@ object App {
         kafkaSink.value.send("material", write(message))
       })
     })
-
 
     cresult.foreachRDD(item => {
       item.foreach(message => {
