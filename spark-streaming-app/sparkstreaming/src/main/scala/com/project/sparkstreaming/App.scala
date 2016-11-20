@@ -108,7 +108,7 @@ object App {
   // Average Drilling/Milling Speed/Heat
   def avgDMSH(data: List[ProdData], datatype: String): Double = {
     val d = data.filter(_  match {
-        case ProdData(x: Double, _, datatype, _) => true
+        case ProdData(x: Double, _, `datatype`, _) => true
         case _ => false
     }).map(_.value.asInstanceOf[Double])
 
@@ -161,16 +161,6 @@ object App {
     cresult.print()
 
     // aggregate Material Data
-    /*
-    number: 4728,
-        amount: 4,
-        rejects: 1,
-        prodtime: 22.4,
-        avg_temperature_drilling: 135.6,
-        avg_speed_drilling: 67.5,
-        avg_temperature_milling: 111.6,
-        avg_speed_milling: 88.6
-    */
     val itemstream = jsvals.map(record => ItemData(getErpData(record), getSpecData(record), getProdDataList(record)))
     val bymaterial = itemstream.map(record => (record.erpData.materialNumber, record))
     val amount     = bymaterial.map(x => (x._1, 1)).reduceByKey(_ + _)
